@@ -168,3 +168,38 @@ window.loadVideo = function(item, title) {
         video.play();
     }
 };
+// ==========================================
+// --- Conexión con Sanity ---
+// ==========================================
+
+async function cargarContenidoSanity() {
+  try {
+    const { createClient } = await import('./node_modules/@sanity/client/dist/index.browser.esm.js')
+    
+    const client = createClient({
+      projectId: 'wnfb3rqp',
+      dataset: 'production',
+      useCdn: true,
+      apiVersion: '2024-01-01',
+    })
+
+    // Cargar página de inicio
+    const inicio = await client.fetch(`*[_type == "inicio"][0]`)
+    if (inicio) {
+      const titulo = document.querySelector('.title')
+      const subtitulo = document.querySelector('.subtitle')
+      const descripcion = document.querySelector('.description')
+      const boton = document.querySelector('.btn.btn-primary')
+
+      if (titulo && inicio.titulo) titulo.textContent = inicio.titulo
+      if (subtitulo && inicio.subtitulo) subtitulo.textContent = inicio.subtitulo
+      if (descripcion && inicio.descripcion) descripcion.textContent = inicio.descripcion
+      if (boton && inicio.botonTexto) boton.textContent = inicio.botonTexto
+    }
+
+  } catch (error) {
+    console.log('Sanity no disponible:', error)
+  }
+}
+
+cargarContenidoSanity()
