@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | Hernández Shoteam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body class="auth-body">
+
+    <!-- Header Lite -->
+    <header id="header" class="header scrolled">
+        <div class="container nav-container" style="justify-content: center;">
+            <a href="index.html" class="logo">
+                <span class="logo-accent">H</span>ERNÁNDEZ <span class="logo-sub">SHOTEAM</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="auth-main">
+        <div class="auth-container-wrapper glass-panel fade-in visible">
+            <div class="auth-box">
+                <h2 class="auth-title">Inicia sesión en tu cuenta</h2>
+                <hr class="auth-divider">
+                
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" placeholder="usuario@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" placeholder="********" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100" style="margin-top: 1rem; font-size: 1.1rem; padding: 1rem;">Iniciar Sesión</button>
+                    
+                    <div class="auth-footer text-center" style="margin-top: 1.5rem;">
+                        <p style="color: var(--clr-text-muted); font-size: 0.9rem;">
+                            ¿No tienes una cuenta? <a href="#" id="switchToRegister" style="color: var(--clr-primary); font-weight: 600;">Regístrate</a>
+                        </p>
+                    </div>
+                </form>
+
+                <form id="registerForm" class="auth-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="reg-name">Nombre completo</label>
+                        <input type="text" id="reg-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Correo electrónico</label>
+                        <input type="email" id="reg-email" placeholder="usuario@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Contraseña</label>
+                        <input type="password" id="reg-password" placeholder="********" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100" style="margin-top: 1rem; font-size: 1.1rem; padding: 1rem;">Registrarse</button>
+                    
+                    <div class="auth-footer text-center" style="margin-top: 1.5rem;">
+                        <p style="color: var(--clr-text-muted); font-size: 0.9rem;">
+                            ¿Ya tienes una cuenta? <a href="#" id="switchToLogin" style="color: var(--clr-primary); font-weight: 600;">Inicia Sesión</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+</body>
+</html>

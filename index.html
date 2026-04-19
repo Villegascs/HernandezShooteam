@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hernández Shoteam | International Shooting Team</title>
+    <meta name="description" content="Equipo de tiro internacional. Cursos y entrenamientos personalizados con los mejores.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Boxicons for icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header id="header" class="header">
+        <div class="container nav-container">
+            <a href="#inicio" class="logo">
+                <span class="logo-accent">H</span>ERNÁNDEZ <span class="logo-sub">SHOTEAM</span>
+            </a>
+            
+            <nav class="navbar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#inicio" class="nav-link active">Inicio</a></li>
+                    <li class="nav-item"><a href="#sobre-nosotros" class="nav-link">Sobre Nosotros</a></li>
+                    <li class="nav-item"><a href="#logros" class="nav-link">Logros</a></li>
+                    <li class="nav-item"><a href="#cursos" class="nav-link">Cursos</a></li>
+                    <li class="nav-item"><a href="#contacto" class="nav-link">Contacto</a></li>
+                    <li class="nav-item auth-container" id="auth-nav-container">
+                        <!-- Dynamic Auth Buttons Inserted via JS -->
+                        <a href="login.html" class="nav-link btn-contact">Iniciar Sesión</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <button class="mobile-toggle" id="mobile-toggle">
+                <i class='bx bx-menu'></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home / Hero Section -->
+        <section id="inicio" class="hero section">
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <h2 class="subtitle fade-up">Precisión y Excelencia</h2>
+                <h1 class="title fade-up delay-1">Internacional<br><span class="text-gradient">Shooting Team</span></h1>
+                <p class="description fade-up delay-2">Formando campeones, perfeccionando la técnica. Entrenamientos personalizados del más alto nivel táctico y competitivo.</p>
+                <div class="hero-brns fade-up delay-3">
+                    <a href="#cursos" class="btn btn-primary">Ver Cursos</a>
+                    <a href="#contacto" class="btn btn-outline">Reservar Sesión</a>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <span class="mouse">
+                    <span class="wheel"></span>
+                </span>
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="sobre-nosotros" class="about section">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <span class="section-badge">El Equipo</span>
+                    <h2 class="section-title">Sobre <span class="text-gradient">Nosotros</span></h2>
+                </div>
+                <div class="about-grid">
+                    <div class="about-text fade-in">
+                        <p class="lead">Hernández Shoteam es un referente en el circuito internacional de tiro deportivo y táctico.</p>
+                        <p>Nuestra misión es llevar a los tiradores a su máximo potencial a través de metodologías probadas en competiciones de élite. Con años de experiencia en la arena internacional, nuestro equipo de instructores certificados está comprometido con la excelencia, la seguridad y el rendimiento.</p>
+                        <ul class="about-features">
+                            <li><i class='bx bx-check-shield'></i> Instructores Internacionales</li>
+                            <li><i class='bx bx-target-lock'></i> Metodología Avanzada</li>
+                            <li><i class='bx bx-medal'></i> Mentalidad Competitiva</li>
+                        </ul>
+                    </div>
+                    <div class="about-visual placeholder-box fade-in delay-1">
+                        <div class="glass-panel">
+                            <i class='bx bx-shield-quarter'></i>
+                            <h3>Compromiso y Disciplina</h3>
+                            <p>Forjando el carácter del tirador de élite a través del esfuerzo constante.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section id="logros" class="achievements section alt-bg">
+            <div class="container">
+                <div class="section-header text-center fade-up">
+                    <span class="section-badge">Palmarés</span>
+                    <h2 class="section-title">Nuestros <span class="text-gradient">Logros</span></h2>
+                    <p class="section-desc">El trabajo duro se refleja en los resultados obtenidos a nivel mundial.</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card fade-up delay-1">
+                        <div class="stat-icon"><i class='bx bx-trophy'></i></div>
+                        <h3 class="stat-number">50+</h3>
+                        <p class="stat-label">Podios Internacionales</p>
+                    </div>
+                    <div class="stat-card fade-up delay-2">
+                        <div class="stat-icon"><i class='bx bx-medal'></i></div>
+                        <h3 class="stat-number">15</h3>
+                        <p class="stat-label">Campeonatos Nacionales</p>
+                    </div>
+                    <div class="stat-card fade-up delay-3">
+                        <div class="stat-icon"><i class='bx bx-group'></i></div>
+                        <h3 class="stat-number">500+</h3>
+                        <p class="stat-label">Alumnos Entrenados</p>
+                    </div>
+                    <div class="stat-card fade-up delay-4">
+                        <div class="stat-icon"><i class='bx bx-globe'></i></div>
+                        <h3 class="stat-number">12</h3>
+                        <p class="stat-label">Países Visitados</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Courses Section -->
+        <section id="cursos" class="courses section">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <span class="section-badge">Formación</span>
+                    <h2 class="section-title">Nuestros <span class="text-gradient">Cursos</span></h2>
+                    <p class="section-desc">Entrenamientos personalizados adaptados a tu nivel, desde fundamentos básicos hasta competición de élite.</p>
+                </div>
+
+                <div class="cards-grid">
+                    <!-- Course 1 -->
+                    <div class="course-card fade-up delay-1">
+                        <div class="course-img placeholder-img" style="background-image: url('https://images.unsplash.com/photo-1595113316349-9fa4eb24f884?auto=format&fit=crop&q=80&w=600'); background-size: cover; background-position: center;">
+                            <span class="level-badge">Básico</span>
+                        </div>
+                        <div class="course-content">
+                            <h3>Manejo de Armas de Aire</h3>
+                            <p>Medidas de seguridad, reglamento respecto a la ISSF, posturas, y primeros pasos en el tiro deportivo.</p>
+                            <div class="course-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                <span class="course-price" style="font-weight: 700; font-size: 1.2rem; color: var(--clr-primary);">$49.99</span>
+                                <button class="btn btn-primary btn-buy" data-course-id="c1" data-course-title="Manejo de Armas de Aire" data-course-img="https://images.unsplash.com/photo-1595113316349-9fa4eb24f884?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Course 2 -->
+                    <div class="course-card fade-up delay-2">
+                        <div class="course-img placeholder-img" style="background-image: url('https://images.unsplash.com/photo-1611004875323-28c9b36ca6d5?auto=format&fit=crop&q=80&w=600'); background-size: cover; background-position: center;">
+                            <span class="level-badge accent">Intermedio</span>
+                        </div>
+                        <div class="course-content">
+                            <h3>Tiro Dinámico</h3>
+                            <p>Aprende a disparar en movimiento, transiciones rápidas y resolución de interrupciones bajo presión.</p>
+                            <div class="course-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                <span class="course-price" style="font-weight: 700; font-size: 1.2rem; color: var(--clr-primary);">$75.00</span>
+                                <button class="btn btn-primary btn-buy" data-course-id="c2" data-course-title="Tiro Dinámico" data-course-img="https://images.unsplash.com/photo-1611004875323-28c9b36ca6d5?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course 3 -->
+                    <div class="course-card fade-up delay-3">
+                        <div class="course-img placeholder-img" style="background-image: url('https://images.unsplash.com/photo-1594186591030-f38b02131977?auto=format&fit=crop&q=80&w=600'); background-size: cover; background-position: center;">
+                            <span class="level-badge premium">Avanzado</span>
+                        </div>
+                        <div class="course-content">
+                            <h3>Entrenamiento Competitivo</h3>
+                            <p>Preparación específica para campeonatos. Psicología del tiro, análisis táctico y optimización pura.</p>
+                            <div class="course-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                <span class="course-price" style="font-weight: 700; font-size: 1.2rem; color: var(--clr-primary);">$120.00</span>
+                                <button class="btn btn-primary btn-buy" data-course-id="c3" data-course-title="Entrenamiento Competitivo" data-course-img="https://images.unsplash.com/photo-1594186591030-f38b02131977?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contacto" class="contact section alt-bg">
+            <div class="container">
+                <div class="contact-grid">
+                    <div class="contact-info fade-in">
+                        <div class="section-header">
+                            <span class="section-badge">Únete al Equipo</span>
+                            <h2 class="section-title">Contáctanos</h2>
+                            <p class="section-desc">¿Listo para llevar tu entrenamiento al siguiente nivel? Escríbenos para consultar disponibilidad y agendar tu sesión.</p>
+                        </div>
+                        
+                        <div class="info-items">
+                            <div class="info-item">
+                                <div class="icon"><i class='bx bx-envelope'></i></div>
+                                <div>
+                                    <h4>Email</h4>
+                                    <p>entrenamiento@hernandezshoteam.com</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="icon"><i class='bx bx-phone'></i></div>
+                                <div>
+                                    <h4>Teléfono / WhatsApp</h4>
+                                    <p>+1 (555) 123-4567</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="icon"><i class='bx bx-map'></i></div>
+                                <div>
+                                    <h4>Ubicación Base</h4>
+                                    <p>Campos Internacionales (Disponibles por Booking)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class='bx bxl-instagram'></i></a>
+                            <a href="#" class="social-link"><i class='bx bxl-youtube'></i></a>
+                            <a href="#" class="social-link"><i class='bx bxl-tiktok'></i></a>
+                        </div>
+                    </div>
+
+                    <div class="contact-form-wrapper glass-panel fade-in delay-2">
+                        <form id="contactForm" class="contact-form">
+                            <div class="form-group">
+                                <label for="name">Nombre Completo</label>
+                                <input type="text" id="name" placeholder="Ej. Juan Pérez" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Correo Electrónico</label>
+                                <input type="email" id="email" placeholder="tu@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="interest">Nivel de Interés</label>
+                                <select id="interest">
+                                    <option value="basico">Fundamentos Básico</option>
+                                    <option value="dinamico">Tiro Dinámico / Intermedio</option>
+                                    <option value="elite">Entrenamiento Competitivo</option>
+                                    <option value="otro">Asesoría / Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Mensaje</label>
+                                <textarea id="message" rows="4" placeholder="Cuéntanos sobre tu experiencia y objetivos..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Enviar Mensaje</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <span class="logo-accent">H</span>ERNÁNDEZ <span class="logo-sub">SHOTEAM</span>
+            </div>
+            <p class="copyright">&copy; 2026 Hernández Shoteam. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

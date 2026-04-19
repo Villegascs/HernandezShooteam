@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Cursos | Hernández Shoteam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body class="dashboard-body">
+
+    <!-- Header Lite -->
+    <header id="header" class="header scrolled">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-accent">H</span>ERNÁNDEZ <span class="logo-sub">SHOTEAM</span>
+            </a>
+            <div class="user-menu">
+                <span style="margin-right: 1rem; color: var(--clr-text-muted);" id="userGreeting">Hola, Tirador</span>
+                <button class="btn btn-outline" id="btnLogout" style="padding: 0.5rem 1rem;">Cerrar Sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-main section" style="padding-top: 100px; min-height: 80vh;">
+        <div class="container">
+            <h1 class="section-title" style="margin-bottom: 3rem;">Mis <span class="text-gradient">Cursos</span></h1>
+            
+            <div id="myCoursesGrid" class="cards-grid">
+                <!-- Courses will be dynamically injected here by JS -->
+            </div>
+
+            <div id="noCoursesMessage" style="display: none; text-align: center; padding: 4rem 2rem; background: var(--clr-bg-card); border-radius: var(--border-radius-lg); border: 1px dashed var(--glass-border);">
+                <i class='bx bx-book-open' style="font-size: 4rem; color: var(--clr-text-muted); margin-bottom: 1rem;"></i>
+                <h3>Aún no tienes cursos</h3>
+                <p style="color: var(--clr-text-muted); margin: 1rem 0 2rem;">Explora nuestra oferta de entrenamientos y mejora tus habilidades de tiro.</p>
+                <a href="index.html#cursos" class="btn btn-primary">Ver Catálogo de Cursos</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <span class="logo-accent">H</span>ERNÁNDEZ <span class="logo-sub">SHOTEAM</span>
+            </div>
+            <p class="copyright">&copy; 2026 Hernández Shoteam. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
