@@ -9,403 +9,72 @@
     <link rel="stylesheet" href="styles.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        /* ─── Layout ─── */
         .catalog-main { padding-top: 100px; }
-
-        /* ─── Hero Banner ─── */
-        .catalog-hero {
-            padding: 5rem 0 4rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .catalog-hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 50% 0%, rgba(255,92,0,0.12) 0%, transparent 65%);
-            pointer-events: none;
-        }
+        .catalog-hero { padding: 5rem 0 4rem; text-align: center; position: relative; overflow: hidden; }
+        .catalog-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(255,92,0,0.12) 0%, transparent 65%); pointer-events: none; }
         .catalog-hero .section-badge { margin-bottom: 1rem; }
         .catalog-hero h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); margin-bottom: 1rem; }
         .catalog-hero p  { color: var(--clr-text-muted); max-width: 600px; margin: 0 auto 2.5rem; }
-
-        /* ─── Filter Tabs ─── */
-        .filter-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-        .filter-btn {
-            padding: 0.55rem 1.4rem;
-            border-radius: 50px;
-            border: 1px solid var(--glass-border);
-            background: transparent;
-            color: var(--clr-text-muted);
-            font-family: var(--font-body);
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
+        .filter-bar { display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .filter-btn { padding: 0.55rem 1.4rem; border-radius: 50px; border: 1px solid var(--glass-border); background: transparent; color: var(--clr-text-muted); font-family: var(--font-body); font-size: 0.9rem; cursor: pointer; transition: var(--transition); }
         .filter-btn:hover  { border-color: var(--clr-primary); color: var(--clr-primary); }
-        .filter-btn.active {
-            background: var(--clr-primary);
-            border-color: var(--clr-primary);
-            color: #fff;
-            font-weight: 600;
-        }
-
-        /* ─── Course Count ─── */
-        .course-count {
-            text-align: center;
-            color: var(--clr-text-muted);
-            font-size: 0.85rem;
-            margin-bottom: 3rem;
-        }
-
-        /* ─── Level Section ─── */
-        .level-section {
-            margin-bottom: 5rem;
-        }
-        .level-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        .level-icon {
-            width: 48px; height: 48px;
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem;
-            flex-shrink: 0;
-        }
+        .filter-btn.active { background: var(--clr-primary); border-color: var(--clr-primary); color: #fff; font-weight: 600; }
+        .course-count { text-align: center; color: var(--clr-text-muted); font-size: 0.85rem; margin-bottom: 3rem; }
+        .level-section { margin-bottom: 5rem; }
+        .level-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border); }
+        .level-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
         .level-icon.basic    { background: rgba(34,197,94,0.12);  color: #22c55e; }
         .level-icon.inter    { background: rgba(251,191,36,0.12); color: #fbbf24; }
         .level-icon.advanced { background: rgba(255,92,0,0.12);   color: var(--clr-primary); }
-        .level-header h2     { font-size: 1.6rem; }
-        .level-header p      { color: var(--clr-text-muted); font-size: 0.9rem; margin: 0; }
-        .level-badge-text {
-            margin-left: auto;
-            padding: 0.3rem 0.9rem;
-            border-radius: 50px;
-            font-size: 0.78rem;
-            font-weight: 600;
-        }
+        .level-header h2 { font-size: 1.6rem; }
+        .level-header p  { color: var(--clr-text-muted); font-size: 0.9rem; margin: 0; }
+        .level-badge-text { margin-left: auto; padding: 0.3rem 0.9rem; border-radius: 50px; font-size: 0.78rem; font-weight: 600; }
         .level-badge-text.basic    { background: rgba(34,197,94,0.1);  color: #22c55e;  border: 1px solid rgba(34,197,94,0.2); }
         .level-badge-text.inter    { background: rgba(251,191,36,0.1); color: #fbbf24;  border: 1px solid rgba(251,191,36,0.2); }
         .level-badge-text.advanced { background: rgba(255,92,0,0.1);   color: var(--clr-primary); border: 1px solid rgba(255,92,0,0.2); }
-
-        /* ─── Carousel ─── */
-        .carousel-wrapper {
-            position: relative;
-        }
-        /* Edge fade overlays */
-        .carousel-wrapper::before,
-        .carousel-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 0; bottom: 0;
-            width: 80px;
-            z-index: 2;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        .carousel-wrapper::before {
-            left: 0;
-            background: linear-gradient(to right, var(--clr-bg-main), transparent);
-        }
-        .carousel-wrapper::after {
-            right: 0;
-            background: linear-gradient(to left, var(--clr-bg-main), transparent);
-        }
+        .carousel-wrapper { position: relative; }
+        .carousel-wrapper::before, .carousel-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none; transition: opacity 0.3s; }
+        .carousel-wrapper::before { left: 0; background: linear-gradient(to right, var(--clr-bg-main), transparent); }
+        .carousel-wrapper::after  { right: 0; background: linear-gradient(to left, var(--clr-bg-main), transparent); }
         .carousel-wrapper.at-start::before { opacity: 0; }
         .carousel-wrapper.at-end::after    { opacity: 0; }
-
-        .carousel-track {
-            display: flex;
-            gap: 1.5rem;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            scrollbar-width: none;
-            padding: 0.5rem 0 1.5rem;
-        }
+        .carousel-track { display: flex; gap: 1.5rem; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 0.5rem 0 1.5rem; }
         .carousel-track::-webkit-scrollbar { display: none; }
-
-        /* Arrow Buttons */
-        .carousel-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-60%);
-            z-index: 3;
-            width: 44px; height: 44px;
-            border-radius: 50%;
-            background: var(--clr-bg-card);
-            border: 1px solid var(--glass-border);
-            color: var(--clr-text-main);
-            font-size: 1.4rem;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-        }
-        .carousel-arrow:hover {
-            background: var(--clr-primary);
-            border-color: var(--clr-primary);
-            color: #fff;
-            transform: translateY(-60%) scale(1.08);
-        }
-        .carousel-arrow:disabled {
-            opacity: 0.25;
-            cursor: default;
-            pointer-events: none;
-        }
+        .carousel-arrow { position: absolute; top: 50%; transform: translateY(-60%); z-index: 3; width: 44px; height: 44px; border-radius: 50%; background: var(--clr-bg-card); border: 1px solid var(--glass-border); color: var(--clr-text-main); font-size: 1.4rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+        .carousel-arrow:hover { background: var(--clr-primary); border-color: var(--clr-primary); color: #fff; transform: translateY(-60%) scale(1.08); }
+        .carousel-arrow:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
         .carousel-arrow.prev { left: -22px; }
         .carousel-arrow.next { right: -22px; }
-
-        /* Dots */
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        .carousel-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: var(--glass-border);
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-        }
-        .carousel-dot.active {
-            background: var(--clr-primary);
-            transform: scale(1.3);
-        }
-        .catalog-card {
-            background: var(--clr-bg-card);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-        }
-        .catalog-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(255,92,0,0.3);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        }
-        .catalog-card-img {
-            height: 190px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .catalog-card-img::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%);
-        }
-        .catalog-card-img .level-pill {
-            position: absolute;
-            top: 1rem; left: 1rem;
-            padding: 0.3rem 0.75rem;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            z-index: 1;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .carousel-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.5rem; }
+        .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--glass-border); cursor: pointer; transition: var(--transition); border: none; }
+        .carousel-dot.active { background: var(--clr-primary); transform: scale(1.3); }
+        .catalog-card { background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: var(--border-radius-lg); overflow: hidden; transition: var(--transition); display: flex; flex-direction: column; min-width: 300px; max-width: 320px; flex-shrink: 0; }
+        .catalog-card:hover { transform: translateY(-6px); border-color: rgba(255,92,0,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        .catalog-card-img { height: 190px; background-size: cover; background-position: center; position: relative; overflow: hidden; }
+        .catalog-card-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%); }
+        .catalog-card-img .level-pill { position: absolute; top: 1rem; left: 1rem; padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; z-index: 1; text-transform: uppercase; letter-spacing: 0.5px; }
         .level-pill.basic    { background: rgba(34,197,94,0.9);  color: #fff; }
         .level-pill.inter    { background: rgba(251,191,36,0.9); color: #111; }
         .level-pill.advanced { background: var(--clr-primary);    color: #fff; }
-        .catalog-card-body {
-            padding: 1.5rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .catalog-card-body h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            line-height: 1.4;
-        }
-        .catalog-card-body p {
-            color: var(--clr-text-muted);
-            font-size: 0.87rem;
-            line-height: 1.6;
-            flex: 1;
-            margin-bottom: 1.2rem;
-        }
-        .card-meta {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.2rem;
-            font-size: 0.8rem;
-            color: var(--clr-text-muted);
-        }
-        .card-meta span { display: flex; align-items: center; gap: 0.3rem; }
-        .card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            border-top: 1px solid var(--glass-border);
-            padding-top: 1.2rem;
-        }
-        .card-price {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--clr-primary);
-        }
-        .card-price .old-price {
-            font-size: 0.85rem;
-            color: var(--clr-text-muted);
-            text-decoration: line-through;
-            font-weight: 400;
-            display: block;
-            font-family: var(--font-body);
-        }
-
-        /* ─── Modal ─── */
-        @keyframes modalIn {
-            from { opacity:0; transform:scale(0.85) translateY(20px); }
-            to   { opacity:1; transform:scale(1) translateY(0); }
-        }
-
-        /* ─── Floating top bar ─── */
-        .catalog-topbar {
-            position: sticky;
-            top: 70px;
-            z-index: 100;
-            background: rgba(13,14,17,0.85);
-            backdrop-filter: blur(14px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 0.75rem 0;
-        }
-
-        /* ─── Course Card Override ─── */
-        .catalog-card {
-            background: var(--clr-bg-card);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            min-width: 300px;
-            max-width: 320px;
-            flex-shrink: 0;
-        }
-        .catalog-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(255,92,0,0.3);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        }
-        .catalog-card-img {
-            height: 190px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .catalog-card-img::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%);
-        }
-        .catalog-card-img .level-pill {
-            position: absolute;
-            top: 1rem; left: 1rem;
-            padding: 0.3rem 0.75rem;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            z-index: 1;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .level-pill.basic    { background: rgba(34,197,94,0.9);  color: #fff; }
-        .level-pill.inter    { background: rgba(251,191,36,0.9); color: #111; }
-        .level-pill.advanced { background: var(--clr-primary);    color: #fff; }
-        .catalog-card-body {
-            padding: 1.5rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
+        .catalog-card-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
         .catalog-card-body h3 { font-size: 1.1rem; margin-bottom: 0.5rem; line-height: 1.4; }
         .catalog-card-body p  { color: var(--clr-text-muted); font-size: 0.87rem; line-height: 1.6; flex: 1; margin-bottom: 1.2rem; }
-        .card-meta {
-            display: flex; gap: 0.75rem; flex-wrap: wrap;
-            margin-bottom: 1.2rem; font-size: 0.79rem; color: var(--clr-text-muted);
-        }
+        .card-meta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.2rem; font-size: 0.79rem; color: var(--clr-text-muted); }
         .card-meta span { display: flex; align-items: center; gap: 0.3rem; }
-        .card-footer {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 0.75rem; border-top: 1px solid var(--glass-border); padding-top: 1.2rem;
-        }
+        .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; border-top: 1px solid var(--glass-border); padding-top: 1.2rem; }
         .card-price { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 700; color: var(--clr-primary); }
         .card-price .old-price { font-size: 0.85rem; color: var(--clr-text-muted); text-decoration: line-through; font-weight: 400; display: block; font-family: var(--font-body); }
-
-        /* ─── Todos los botones de compra: naranja ─── */
-        .btn-buy {
-            background: var(--clr-primary) !important;
-            color: #fff !important;
-            border-color: var(--clr-primary) !important;
-        }
-        .btn-buy:hover:not(:disabled) {
-            background: #e05200 !important;
-            border-color: #e05200 !important;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255,92,0,0.35);
-        }
-        .btn-buy:disabled {
-            background: rgba(34,197,94,0.15) !important;
-            color: #22c55e !important;
-            border: 1px solid rgba(34,197,94,0.3) !important;
-        }
-
-        /* ─── Modal ─── */
-        @keyframes modalIn {
-            from { opacity:0; transform:scale(0.85) translateY(20px); }
-            to   { opacity:1; transform:scale(1) translateY(0); }
-        }
-
-        /* ─── Floating top bar ─── */
-        .catalog-topbar {
-            position: sticky; top: 70px; z-index: 100;
-            background: rgba(13,14,17,0.85);
-            backdrop-filter: blur(14px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 0.75rem 0;
-        }
-
-        /* ─── Hidden sections (filter) ─── */
+        .btn-buy { background: var(--clr-primary) !important; color: #fff !important; border-color: var(--clr-primary) !important; }
+        .btn-buy:hover:not(:disabled) { background: #e05200 !important; border-color: #e05200 !important; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,92,0,0.35); }
+        .btn-buy:disabled { background: rgba(34,197,94,0.15) !important; color: #22c55e !important; border: 1px solid rgba(34,197,94,0.3) !important; }
+        .catalog-topbar { position: sticky; top: 70px; z-index: 100; background: rgba(13,14,17,0.85); backdrop-filter: blur(14px); border-bottom: 1px solid var(--glass-border); padding: 0.75rem 0; }
         .level-section.hidden { display: none; }
-
-        @media(max-width: 640px) {
-            .level-header { flex-wrap: wrap; }
-            .level-badge-text { margin-left: 0; }
-            .carousel-arrow { display: none; }
-            .catalog-card { min-width: 260px; }
-        }
+        @keyframes modalIn { from { opacity:0; transform:scale(0.85) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
+        @media(max-width: 640px) { .level-header { flex-wrap: wrap; } .level-badge-text { margin-left: 0; } .carousel-arrow { display: none; } .catalog-card { min-width: 260px; } }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
     <header id="header" class="header scrolled">
         <div class="container nav-container">
             <a href="index.html" class="logo">
@@ -434,15 +103,9 @@
                                     </div>
                                 </div>
                                 <hr class="profile-dropdown-divider">
-                                <a href="perfil.html" class="profile-dropdown-item" role="menuitem">
-                                    <i class='bx bx-user-circle'></i><span>Mi Perfil</span>
-                                </a>
-                                <a href="mis-cursos.html" class="profile-dropdown-item" role="menuitem">
-                                    <i class='bx bx-book-open'></i><span>Mis Cursos</span>
-                                </a>
-                                <a href="mensajes.html" class="profile-dropdown-item" role="menuitem">
-                                    <i class='bx bx-message-rounded-dots'></i><span>Mensajes</span>
-                                </a>
+                                <a href="perfil.html" class="profile-dropdown-item" role="menuitem"><i class='bx bx-user-circle'></i><span>Mi Perfil</span></a>
+                                <a href="mis-cursos.html" class="profile-dropdown-item" role="menuitem"><i class='bx bx-book-open'></i><span>Mis Cursos</span></a>
+                                <a href="mensajes.html" class="profile-dropdown-item" role="menuitem"><i class='bx bx-message-rounded-dots'></i><span>Mensajes</span></a>
                                 <div class="profile-dropdown-item language-selector">
                                     <i class='bx bx-globe'></i><span>Idioma</span>
                                     <select class="lang-select" id="langSelect" onclick="event.stopPropagation()">
@@ -451,9 +114,7 @@
                                     </select>
                                 </div>
                                 <hr class="profile-dropdown-divider">
-                                <button class="profile-dropdown-item profile-logout-btn" id="ddLogout" role="menuitem">
-                                    <i class='bx bx-log-out'></i><span>Cerrar Sesión</span>
-                                </button>
+                                <button class="profile-dropdown-item profile-logout-btn" id="ddLogout" role="menuitem"><i class='bx bx-log-out'></i><span>Cerrar Sesión</span></button>
                             </div>
                         </div>
                     </li>
@@ -464,8 +125,6 @@
     </header>
 
     <main class="catalog-main">
-
-        <!-- Hero -->
         <section class="catalog-hero section">
             <div class="container">
                 <span class="section-badge">Formación de Élite</span>
@@ -474,7 +133,6 @@
             </div>
         </section>
 
-        <!-- Sticky Filter Bar -->
         <div class="catalog-topbar">
             <div class="container filter-bar">
                 <button class="filter-btn active" data-filter="all">Todo</button>
@@ -486,485 +144,46 @@
 
         <section class="section">
             <div class="container">
-                <p class="course-count" id="courseCount">Mostrando <strong>21</strong> cursos</p>
+                <p class="course-count" id="courseCount">Cargando cursos...</p>
 
-                <!-- ════ BÁSICO ════ -->
                 <div class="level-section" data-level="basic" id="sectionBasic">
                     <div class="level-header">
                         <div class="level-icon basic"><i class='bx bx-target-lock'></i></div>
-                        <div>
-                            <h2>Nivel Básico</h2>
-                            <p>Para tiradores que comienzan su camino en el tiro deportivo</p>
-                        </div>
-                        <span class="level-badge-text basic">7 Cursos</span>
+                        <div><h2>Nivel Básico</h2><p>Para tiradores que comienzan su camino en el tiro deportivo</p></div>
+                        <span class="level-badge-text basic">0 Cursos</span>
                     </div>
                     <div class="carousel-wrapper at-start" id="wrapBasic">
-                        <button class="carousel-arrow prev" data-target="trackBasic" aria-label="Anterior" disabled><i class='bx bx-chevron-left'></i></button>
-                        <button class="carousel-arrow next" data-target="trackBasic" aria-label="Siguiente"><i class='bx bx-chevron-right'></i></button>
-                        <div class="carousel-track" id="trackBasic">
-
-                            <!-- B1 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1595113316349-9fa4eb24f884?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill basic">Básico</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Manejo de Armas de Aire</h3>
-                                    <p>Medidas de seguridad, reglamento ISSF, posturas correctas y primeros pasos en el tiro deportivo.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 8 horas</span>
-                                        <span><i class='bx bx-video'></i> 24 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 342 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$65.00</span>$49.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="c1" data-course-title="Manejo de Armas de Aire" data-course-img="https://images.unsplash.com/photo-1595113316349-9fa4eb24f884?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- B2 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1599566219227-2efe0c9b7f5f?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill basic">Básico</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Postura y Respiración</h3>
-                                    <p>Domina la posición de tiro, control de respiración y estabilidad física para mejorar tu precisión desde el primer disparo.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 6 horas</span>
-                                        <span><i class='bx bx-video'></i> 18 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 215 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$50.00</span>$39.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="c4" data-course-title="Postura y Respiración" data-course-img="https://images.unsplash.com/photo-1599566219227-2efe0c9b7f5f?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- B3 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1564415315949-7a0c4c73aab4?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill basic">Básico</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Reglamento ISSF Completo</h3>
-                                    <p>Conoce todas las normas del tiro deportivo internacional: categorías, equipamiento permitido, faltas y sanciones.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 4 horas</span>
-                                        <span><i class='bx bx-video'></i> 12 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 189 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$35.00</span>$24.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="c5" data-course-title="Reglamento ISSF Completo" data-course-img="https://images.unsplash.com/photo-1564415315949-7a0c4c73aab4?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- B4 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1547721064-da6cfb341d50?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill basic">Básico</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Introducción al Tiro con Pistola</h3>
-                                    <p>Fundamentos del tiro con pistola de calibre 22: agarre, puntería, gatillo y primeros ejercicios de precisión.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 5 horas</span>
-                                        <span><i class='bx bx-video'></i> 15 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 278 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$45.00</span>$34.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="b4" data-course-title="Introducción al Tiro con Pistola" data-course-img="https://images.unsplash.com/photo-1547721064-da6cfb341d50?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- B5 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill basic">Básico</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Seguridad en el Campo de Tiro</h3>
-                                    <p>Protocolos de seguridad obligatorios, manejo de armamento en un campo de tiro real y comunicación con otros deportistas.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 3 horas</span>
-                                        <span><i class='bx bx-video'></i> 9 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 412 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$30.00</span>$19.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="b5" data-course-title="Seguridad en el Campo de Tiro" data-course-img="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- B6 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill basic">Básico</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Equipamiento para Principiantes</h3>
-                                    <p>Guía completa de equipamiento: qué comprar, qué evitar, cómo mantener tu arma y accesorios recomendados según tu disciplina.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 4 horas</span>
-                                        <span><i class='bx bx-video'></i> 11 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 253 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$40.00</span>$29.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="b6" data-course-title="Equipamiento para Principiantes" data-course-img="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- B7 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill basic">Básico</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Nutrición del Deportista de Tiro</h3>
-                                    <p>Cómo la alimentación afecta tu concentración, pulso y rendimiento. Planes nutricionales para sesiones de entrenamiento y competición.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 4 horas</span>
-                                        <span><i class='bx bx-video'></i> 10 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 198 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$35.00</span>$27.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="b7" data-course-title="Nutrición del Deportista de Tiro" data-course-img="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        <button class="carousel-arrow prev" aria-label="Anterior" disabled><i class='bx bx-chevron-left'></i></button>
+                        <button class="carousel-arrow next" aria-label="Siguiente"><i class='bx bx-chevron-right'></i></button>
+                        <div class="carousel-track" id="trackBasic"></div>
                         <div class="carousel-dots" id="dotsBasic"></div>
                     </div>
                 </div>
 
-                <!-- ════ INTERMEDIO ════ -->
                 <div class="level-section" data-level="inter" id="sectionInter">
                     <div class="level-header">
                         <div class="level-icon inter"><i class='bx bx-crosshair'></i></div>
-                        <div>
-                            <h2>Nivel Intermedio</h2>
-                            <p>Para tiradores con experiencia que buscan mejorar su técnica y resultado en competición</p>
-                        </div>
-                        <span class="level-badge-text inter">7 Cursos</span>
+                        <div><h2>Nivel Intermedio</h2><p>Para tiradores con experiencia que buscan mejorar su técnica y resultado en competición</p></div>
+                        <span class="level-badge-text inter">0 Cursos</span>
                     </div>
                     <div class="carousel-wrapper at-start" id="wrapInter">
-                        <button class="carousel-arrow prev" data-target="trackInter" aria-label="Anterior" disabled><i class='bx bx-chevron-left'></i></button>
-                        <button class="carousel-arrow next" data-target="trackInter" aria-label="Siguiente"><i class='bx bx-chevron-right'></i></button>
-                        <div class="carousel-track" id="trackInter">
-
-                            <!-- I1 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1611004875323-28c9b36ca6d5?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill inter">Intermedio</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Tiro Dinámico</h3>
-                                    <p>Aprende a disparar en movimiento, transiciones rápidas y resolución de interrupciones bajo presión de tiempo.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 12 horas</span>
-                                        <span><i class='bx bx-video'></i> 32 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 278 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$95.00</span>$75.00</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="c2" data-course-title="Tiro Dinámico" data-course-img="https://images.unsplash.com/photo-1611004875323-28c9b36ca6d5?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- I2 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill inter">Intermedio</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Análisis de Blancos</h3>
-                                    <p>Técnicas de lectura e interpretación de blancos, ajuste de mira y corrección de errores sistemáticos en el patrón de impactos.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 10 horas</span>
-                                        <span><i class='bx bx-video'></i> 28 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 193 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$85.00</span>$65.00</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="c6" data-course-title="Análisis de Blancos" data-course-img="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- I3 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill inter">Intermedio</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Condición Física para Tiradores</h3>
-                                    <p>Entrenamiento físico especializado: fuerza de antebrazos, estabilidad de core y resistencia mental para sesiones largas de tiro.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 8 horas</span>
-                                        <span><i class='bx bx-video'></i> 22 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 145 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$70.00</span>$55.00</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="c7" data-course-title="Condición Física para Tiradores" data-course-img="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- I4 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill inter">Intermedio</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Tiro de Precisión a 25 metros</h3>
-                                    <p>Técnica de tiro a distancia media: control del gatillo, mira posterior, ritmo de disparo y reducción del MOA en blancos pequeños.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 9 horas</span>
-                                        <span><i class='bx bx-video'></i> 26 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 167 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$80.00</span>$62.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="i4" data-course-title="Tiro de Precisión a 25 metros" data-course-img="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- I5 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill inter">Intermedio</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Tiro Nocturno y con Poca Luz</h3>
-                                    <p>Adaptación visual, uso de linternas tácticas, puntería con visores nocturnos y protocolos de seguridad en entornos de baja visibilidad.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 7 horas</span>
-                                        <span><i class='bx bx-video'></i> 20 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 134 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$75.00</span>$59.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="i5" data-course-title="Tiro Nocturno y con Poca Luz" data-course-img="https://images.unsplash.com/photo-1517963879433-6ad2b056d712?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- I6 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill inter">Intermedio</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Estrategia en Competición IPSC</h3>
-                                    <p>Lectura de stages, planificación de recorridos, orden de blanco y gestión del tiempo en competiciones de tiro práctico IPSC.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 11 horas</span>
-                                        <span><i class='bx bx-video'></i> 30 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 211 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$90.00</span>$72.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="i6" data-course-title="Estrategia en Competición IPSC" data-course-img="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- I7 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill inter">Intermedio</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Mantenimiento Avanzado de Armas</h3>
-                                    <p>Limpieza profunda, desmontaje completo, reemplazo de piezas y ajuste de gatillo para optimizar el rendimiento de tu arma.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 6 horas</span>
-                                        <span><i class='bx bx-video'></i> 16 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 309 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$60.00</span>$47.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="i7" data-course-title="Mantenimiento Avanzado de Armas" data-course-img="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        <button class="carousel-arrow prev" aria-label="Anterior" disabled><i class='bx bx-chevron-left'></i></button>
+                        <button class="carousel-arrow next" aria-label="Siguiente"><i class='bx bx-chevron-right'></i></button>
+                        <div class="carousel-track" id="trackInter"></div>
                         <div class="carousel-dots" id="dotsInter"></div>
                     </div>
                 </div>
 
-                <!-- ════ AVANZADO ════ -->
                 <div class="level-section" data-level="advanced" id="sectionAdvanced">
                     <div class="level-header">
                         <div class="level-icon advanced"><i class='bx bx-trophy'></i></div>
-                        <div>
-                            <h2>Nivel Avanzado</h2>
-                            <p>Para tiradores competitivos que buscan la excelencia y el podio internacional</p>
-                        </div>
-                        <span class="level-badge-text advanced">7 Cursos</span>
+                        <div><h2>Nivel Avanzado</h2><p>Para tiradores competitivos que buscan la excelencia y el podio internacional</p></div>
+                        <span class="level-badge-text advanced">0 Cursos</span>
                     </div>
                     <div class="carousel-wrapper at-start" id="wrapAdvanced">
-                        <button class="carousel-arrow prev" data-target="trackAdvanced" aria-label="Anterior" disabled><i class='bx bx-chevron-left'></i></button>
-                        <button class="carousel-arrow next" data-target="trackAdvanced" aria-label="Siguiente"><i class='bx bx-chevron-right'></i></button>
-                        <div class="carousel-track" id="trackAdvanced">
-
-                            <!-- A1 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1594186591030-f38b02131977?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill advanced">Avanzado</span>
-                                </div>
-                            <div class="catalog-card-body">
-                                <h3>Entrenamiento Competitivo</h3>
-                                <p>Preparación específica para campeonatos: psicología del tiro, análisis táctico y optimización de resultados en competición.</p>
-                                <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 20 horas</span>
-                                        <span><i class='bx bx-video'></i> 48 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 124 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$150.00</span>$120.00</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="c3" data-course-title="Entrenamiento Competitivo" data-course-img="https://images.unsplash.com/photo-1594186591030-f38b02131977?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- A2 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill advanced">Avanzado</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Psicología y Mental Coaching</h3>
-                                    <p>Control mental bajo presión, rutinas pre-competición, manejo del estrés y técnicas de visualización usadas por campeones mundiales.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 14 horas</span>
-                                        <span><i class='bx bx-video'></i> 36 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 98 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$130.00</span>$99.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="c8" data-course-title="Psicología y Mental Coaching" data-course-img="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- A3 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1613769049987-b31b641f25b1?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill advanced">Avanzado</span>
-                                    <span style="position:absolute;top:1rem;right:1rem;background:linear-gradient(135deg,#FFD700,#FF8C00);color:#000;padding:0.3rem 0.75rem;border-radius:50px;font-size:0.72rem;font-weight:800;z-index:1;text-transform:uppercase;">⭐ Premium</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Masterclass: Ruta al Podio Internacional</h3>
-                                    <p>El programa más completo de Shoteam. Desde análisis biomecánico hasta participación en simulacros de competición internacionales.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 30 horas</span>
-                                        <span><i class='bx bx-video'></i> 72 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 56 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$250.00</span>$189.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="c9" data-course-title="Masterclass: Ruta al Podio Internacional" data-course-img="https://images.unsplash.com/photo-1613769049987-b31b641f25b1?auto=format&fit=crop&q=80&w=600" style="background:linear-gradient(135deg,#FFD700,#FF8C00);color:#000;">Comprar Ahora</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- A4 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1552072092-7f9b8d63efcb?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill advanced">Avanzado</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Biomecánica del Disparo Perfecto</h3>
-                                    <p>Análisis científico de cada fase del disparo: pre-tensión, presión de gatillo, seguimiento y recuperación. Con análisis de video frame a frame.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 16 horas</span>
-                                        <span><i class='bx bx-video'></i> 40 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 87 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$160.00</span>$129.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="a4" data-course-title="Biomecánica del Disparo Perfecto" data-course-img="https://images.unsplash.com/photo-1552072092-7f9b8d63efcb?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- A5 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill advanced">Avanzado</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Preparación para Mundiales ISSF</h3>
-                                    <p>Todo lo que necesitas saber para competir a nivel mundial: acreditación, protocolos, clasificaciones y entrenamiento periódico de alta intensidad.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 22 horas</span>
-                                        <span><i class='bx bx-video'></i> 55 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 43 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$200.00</span>$159.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="a5" data-course-title="Preparación para Mundiales ISSF" data-course-img="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- A6 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1544717297-fa95b6ee9643?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill advanced">Avanzado</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Análisis de Video y Auto-Coaching</h3>
-                                    <p>Aprende a filmarte, analizar tus errores técnicos y crear un plan de mejora personal. Herramientas y software utilizados por coaches de élite.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 12 horas</span>
-                                        <span><i class='bx bx-video'></i> 32 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 76 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$140.00</span>$109.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="a6" data-course-title="Análisis de Video y Auto-Coaching" data-course-img="https://images.unsplash.com/photo-1544717297-fa95b6ee9643?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- A7 -->
-                            <div class="catalog-card">
-                                <div class="catalog-card-img" style="background-image:url('https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&q=80&w=600')">
-                                    <span class="level-pill advanced">Avanzado</span>
-                                </div>
-                                <div class="catalog-card-body">
-                                    <h3>Coaching y Dirección de Equipos</h3>
-                                    <p>Para tiradores que quieren convertirse en entrenadores: metodología, planificación de temporadas, motivación y liderazgo de equipo.</p>
-                                    <div class="card-meta">
-                                        <span><i class='bx bx-time'></i> 18 horas</span>
-                                        <span><i class='bx bx-video'></i> 44 lecciones</span>
-                                        <span><i class='bx bx-user'></i> 62 alumnos</span>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div class="card-price"><span class="old-price">$175.00</span>$139.99</div>
-                                        <button class="btn btn-primary btn-buy" data-course-id="a7" data-course-title="Coaching y Dirección de Equipos" data-course-img="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&q=80&w=600">Comprar Curso</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        <button class="carousel-arrow prev" aria-label="Anterior" disabled><i class='bx bx-chevron-left'></i></button>
+                        <button class="carousel-arrow next" aria-label="Siguiente"><i class='bx bx-chevron-right'></i></button>
+                        <div class="carousel-track" id="trackAdvanced"></div>
                         <div class="carousel-dots" id="dotsAdvanced"></div>
                     </div>
                 </div>
@@ -975,38 +194,19 @@
 
     <footer class="footer">
         <div class="container footer-content">
-            <div class="footer-logo">
-                <span class="logo-accent">H</span>ERNÁNDEZ <span class="logo-sub">SHOTEAM</span>
-            </div>
+            <div class="footer-logo"><span class="logo-accent">H</span>ERNÁNDEZ <span class="logo-sub">SHOTEAM</span></div>
             <p class="copyright">&copy; 2026 Hernández Shoteam. Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <!-- Modal: Iniciar Sesión para Comprar -->
-    <div id="loginModal" style="
-        display:none; position:fixed; inset:0; z-index:9999;
-        background:rgba(0,0,0,0.75); backdrop-filter:blur(6px);
-        align-items:center; justify-content:center;">
-        <div style="
-            background:var(--clr-bg-card); border:1px solid var(--glass-border);
-            border-radius:var(--border-radius-lg); padding:2.5rem; max-width:420px;
-            width:90%; text-align:center; animation:modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);">
-            <div style="
-                width:70px; height:70px; border-radius:50%;
-                background:rgba(255,92,0,0.1); border:2px solid rgba(255,92,0,0.3);
-                display:flex; align-items:center; justify-content:center;
-                margin:0 auto 1.5rem; font-size:2rem; color:var(--clr-primary);">
-                <i class='bx bx-lock-alt'></i>
-            </div>
+    <div id="loginModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); align-items:center; justify-content:center;">
+        <div style="background:var(--clr-bg-card); border:1px solid var(--glass-border); border-radius:var(--border-radius-lg); padding:2.5rem; max-width:420px; width:90%; text-align:center; animation:modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);">
+            <div style="width:70px; height:70px; border-radius:50%; background:rgba(255,92,0,0.1); border:2px solid rgba(255,92,0,0.3); display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem; font-size:2rem; color:var(--clr-primary);"><i class='bx bx-lock-alt'></i></div>
             <h3 style="font-size:1.4rem; margin-bottom:0.75rem;">Necesitas una cuenta</h3>
-            <p style="color:var(--clr-text-muted); margin-bottom:2rem; line-height:1.6;">
-                Para comprar un curso debes iniciar sesión o registrarte. ¡Es gratis y solo toma un minuto!
-            </p>
+            <p style="color:var(--clr-text-muted); margin-bottom:2rem; line-height:1.6;">Para comprar un curso debes iniciar sesión o registrarte. ¡Es gratis y solo toma un minuto!</p>
             <div style="display:flex; gap:1rem; justify-content:center;">
                 <button id="modalCancel" class="btn btn-outline" style="flex:1; padding:0.75rem;">Cancelar</button>
-                <a href="login.html" class="btn btn-primary" style="flex:1; padding:0.75rem; text-align:center;">
-                    <i class='bx bx-log-in'></i> Iniciar Sesión
-                </a>
+                <a href="login.html" class="btn btn-primary" style="flex:1; padding:0.75rem; text-align:center;"><i class='bx bx-log-in'></i> Iniciar Sesión</a>
             </div>
         </div>
     </div>
@@ -1014,7 +214,6 @@
     <script src="lang.js"></script>
     <script src="main.js"></script>
 
-    <!-- Firebase: Navbar + Compra -->
     <script type="module">
         import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -1034,250 +233,265 @@
         const auth    = getAuth(app);
         const db      = getFirestore(app);
         const storage = getStorage(app);
-
         let firebaseUser = null;
 
-        function getInitials(name) {
-            if (!name) return '?';
-            return name.trim().split(' ').slice(0, 2).map(n => n[0].toUpperCase()).join('');
-        }
+        function getInitials(name) { if (!name) return '?'; return name.trim().split(' ').slice(0,2).map(n=>n[0].toUpperCase()).join(''); }
         function setAvatar(el, photoURL, initials) {
             if (!el) return;
-            el.innerHTML = photoURL
-                ? `<img src="${photoURL}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
-                : `<span class="avatar-initials">${initials}</span>`;
+            el.innerHTML = photoURL ? `<img src="${photoURL}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : `<span class="avatar-initials">${initials}</span>`;
+        }
+
+        // ── Cargar cursos desde Sanity ──
+        async function cargarCursosDesdeSanity() {
+            try {
+                const projectId = 'wnfb3rqp'
+                const dataset = 'production'
+                const query = encodeURIComponent(`*[_type == "curso"] | order(orden asc)`)
+                const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`
+
+                const res = await fetch(url)
+                const data = await res.json()
+                const cursos = data.result
+                if (!cursos || cursos.length === 0) return
+
+                const tracks = {
+                    basic:    document.getElementById('trackBasic'),
+                    inter:    document.getElementById('trackInter'),
+                    advanced: document.getElementById('trackAdvanced')
+                }
+
+                Object.values(tracks).forEach(t => { if(t) t.innerHTML = '' })
+                const contadores = { basic: 0, inter: 0, advanced: 0 }
+
+                cursos.forEach(curso => {
+                    const track = tracks[curso.nivel]
+                    if (!track) return
+                    contadores[curso.nivel]++
+                    const nivelLabel = curso.nivel === 'basic' ? 'Básico' : curso.nivel === 'inter' ? 'Intermedio' : 'Avanzado'
+                    const premiumBadge = curso.premium ? `<span style="position:absolute;top:1rem;right:1rem;background:linear-gradient(135deg,#FFD700,#FF8C00);color:#000;padding:0.3rem 0.75rem;border-radius:50px;font-size:0.72rem;font-weight:800;z-index:1;text-transform:uppercase;">⭐ Premium</span>` : ''
+                    track.innerHTML += `
+                        <div class="catalog-card">
+                            <div class="catalog-card-img" style="background-image:url('${curso.imagen}')">
+                                <span class="level-pill ${curso.nivel}">${nivelLabel}</span>
+                                ${premiumBadge}
+                            </div>
+                            <div class="catalog-card-body">
+                                <h3>${curso.titulo}</h3>
+                                <p>${curso.descripcion}</p>
+                                <div class="card-meta">
+                                    <span><i class='bx bx-time'></i> ${curso.horas} horas</span>
+                                    <span><i class='bx bx-video'></i> ${curso.lecciones} lecciones</span>
+                                    <span><i class='bx bx-user'></i> ${curso.alumnos} alumnos</span>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="card-price">
+                                        <span class="old-price">$${curso.precioAnterior.toFixed(2)}</span>
+                                        $${curso.precio.toFixed(2)}
+                                    </div>
+                                    <button class="btn btn-primary btn-buy"
+                                        data-course-id="${curso.courseId}"
+                                        data-course-title="${curso.titulo}"
+                                        data-course-img="${curso.imagen}">
+                                        ${curso.premium ? 'Comprar Ahora' : 'Comprar Curso'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>`
+                })
+
+                document.querySelector('#sectionBasic .level-badge-text').textContent    = contadores.basic    + ' Cursos'
+                document.querySelector('#sectionInter .level-badge-text').textContent    = contadores.inter    + ' Cursos'
+                document.querySelector('#sectionAdvanced .level-badge-text').textContent = contadores.advanced + ' Cursos'
+                document.getElementById('courseCount').innerHTML = `Mostrando <strong>${cursos.length}</strong> cursos`
+
+                // Inicializar carruseles DESPUÉS de cargar los cursos
+                initCarousel('trackBasic',    'wrapBasic',    'dotsBasic')
+                initCarousel('trackInter',    'wrapInter',    'dotsInter')
+                initCarousel('trackAdvanced', 'wrapAdvanced', 'dotsAdvanced')
+
+                // Si hay usuario logueado, marcar cursos comprados
+                if (firebaseUser) marcarCursosComprados(firebaseUser)
+
+            } catch(err) {
+                console.log('Error cargando cursos desde Sanity:', err)
+                document.getElementById('courseCount').innerHTML = 'Error al cargar cursos.'
+            }
+        }
+
+        // ── Carrusel ──
+        function initCarousel(trackId, wrapperId, dotsId) {
+            const track   = document.getElementById(trackId)
+            const wrapper = document.getElementById(wrapperId)
+            const dotsEl  = document.getElementById(dotsId)
+            if (!track || !wrapper) return
+
+            const SCROLL_AMT = 330
+
+            if (dotsEl) {
+                dotsEl.innerHTML = ''
+                track.querySelectorAll('.catalog-card').forEach((_, i) => {
+                    const dot = document.createElement('button')
+                    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '')
+                    dot.setAttribute('aria-label', `Curso ${i+1}`)
+                    dot.addEventListener('click', () => { track.scrollTo({ left: i * SCROLL_AMT, behavior: 'smooth' }) })
+                    dotsEl.appendChild(dot)
+                })
+            }
+
+            function updateState() {
+                const scrollLeft = track.scrollLeft
+                const maxScroll  = track.scrollWidth - track.clientWidth
+                wrapper.classList.toggle('at-start', scrollLeft <= 4)
+                wrapper.classList.toggle('at-end',   scrollLeft >= maxScroll - 4)
+                const prevBtn = wrapper.querySelector('.carousel-arrow.prev')
+                const nextBtn = wrapper.querySelector('.carousel-arrow.next')
+                if (prevBtn) prevBtn.disabled = scrollLeft <= 4
+                if (nextBtn) nextBtn.disabled = scrollLeft >= maxScroll - 4
+                if (dotsEl) {
+                    const idx = Math.round(scrollLeft / SCROLL_AMT)
+                    dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) => { d.classList.toggle('active', i === idx) })
+                }
+            }
+
+            wrapper.querySelectorAll('.carousel-arrow').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const dir = btn.classList.contains('prev') ? -1 : 1
+                    track.scrollBy({ left: dir * SCROLL_AMT, behavior: 'smooth' })
+                })
+            })
+
+            track.addEventListener('scroll', updateState, { passive: true })
+            let touchStartX = 0
+            track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX }, { passive: true })
+            track.addEventListener('touchend', e => {
+                const diff = touchStartX - e.changedTouches[0].clientX
+                if (Math.abs(diff) > 50) track.scrollBy({ left: diff > 0 ? SCROLL_AMT : -SCROLL_AMT, behavior: 'smooth' })
+            }, { passive: true })
+            updateState()
+        }
+
+        // ── Marcar cursos comprados ──
+        async function marcarCursosComprados(user) {
+            try {
+                const snap = await getDoc(doc(db, 'users', user.uid))
+                const purchased = (snap.exists() ? snap.data().purchasedCourses : []) || []
+                purchased.forEach(c => {
+                    const btn = document.querySelector(`.btn-buy[data-course-id="${c.id}"]`)
+                    if (btn) {
+                        btn.textContent = '✓ Ya adquirido'
+                        btn.disabled = true
+                        btn.style.background = 'rgba(34,197,94,0.15)'
+                        btn.style.color = '#22c55e'
+                        btn.style.border = '1px solid rgba(34,197,94,0.3)'
+                    }
+                })
+            } catch(e) {}
         }
 
         // ── Auth State ──
         onAuthStateChanged(auth, async (user) => {
-            firebaseUser = user;
-            const loginBtn       = document.getElementById('loginNavBtn');
-            const profileWrapper = document.getElementById('profileDropdownWrapper');
-            const dropdownName   = document.getElementById('dropdownName');
-            const dropdownEmail  = document.getElementById('dropdownEmail');
-            const profileAvatar  = document.getElementById('profileAvatar');
-            const dropdownAvatar = document.getElementById('dropdownAvatar');
+            firebaseUser = user
+            const loginBtn       = document.getElementById('loginNavBtn')
+            const profileWrapper = document.getElementById('profileDropdownWrapper')
+            const dropdownName   = document.getElementById('dropdownName')
+            const dropdownEmail  = document.getElementById('dropdownEmail')
+            const profileAvatar  = document.getElementById('profileAvatar')
+            const dropdownAvatar = document.getElementById('dropdownAvatar')
 
             if (user) {
-                loginBtn.style.display       = 'none';
-                profileWrapper.style.display = 'flex';
-
-                const displayName = user.displayName || user.email.split('@')[0];
-                const initials    = getInitials(displayName);
-                if (dropdownName)  dropdownName.textContent  = displayName;
-                if (dropdownEmail) dropdownEmail.textContent = user.email;
-
-                let photoURL = user.photoURL || null;
-                try {
-                    const snap = await getDoc(doc(db, 'users', user.uid));
-                    if (snap.exists() && snap.data().photoURL) photoURL = snap.data().photoURL;
-                } catch(e) {}
-
-                setAvatar(profileAvatar, photoURL, initials);
-                setAvatar(dropdownAvatar, photoURL, initials);
-
-                // Marcar cursos ya comprados
-                try {
-                    const snap = await getDoc(doc(db, 'users', user.uid));
-                    const purchased = (snap.exists() ? snap.data().purchasedCourses : []) || [];
-                    purchased.forEach(c => {
-                        const btn = document.querySelector(`.btn-buy[data-course-id="${c.id}"]`);
-                        if (btn) {
-                            btn.textContent = '✓ Ya adquirido';
-                            btn.disabled = true;
-                            btn.style.background = 'rgba(34,197,94,0.15)';
-                            btn.style.color = '#22c55e';
-                            btn.style.border = '1px solid rgba(34,197,94,0.3)';
-                        }
-                    });
-                } catch(e) {}
-
+                loginBtn.style.display       = 'none'
+                profileWrapper.style.display = 'flex'
+                const displayName = user.displayName || user.email.split('@')[0]
+                const initials    = getInitials(displayName)
+                if (dropdownName)  dropdownName.textContent  = displayName
+                if (dropdownEmail) dropdownEmail.textContent = user.email
+                let photoURL = user.photoURL || null
+                try { const snap = await getDoc(doc(db, 'users', user.uid)); if (snap.exists() && snap.data().photoURL) photoURL = snap.data().photoURL } catch(e) {}
+                setAvatar(profileAvatar, photoURL, initials)
+                setAvatar(dropdownAvatar, photoURL, initials)
+                marcarCursosComprados(user)
             } else {
-                loginBtn.style.display       = '';
-                profileWrapper.style.display = 'none';
+                loginBtn.style.display       = ''
+                profileWrapper.style.display = 'none'
             }
-        });
+        })
 
         // ── Dropdown Toggle ──
-        const avatarBtn = document.getElementById('profileAvatarBtn');
-        const dropdown  = document.getElementById('profileDropdown');
-        const chevron   = document.getElementById('profileChevron');
+        const avatarBtn = document.getElementById('profileAvatarBtn')
+        const dropdown  = document.getElementById('profileDropdown')
+        const chevron   = document.getElementById('profileChevron')
         if (avatarBtn) {
             avatarBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isOpen = dropdown.classList.contains('open');
-                dropdown.classList.toggle('open', !isOpen);
-                avatarBtn.setAttribute('aria-expanded', String(!isOpen));
-                chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
-            });
+                e.stopPropagation()
+                const isOpen = dropdown.classList.contains('open')
+                dropdown.classList.toggle('open', !isOpen)
+                avatarBtn.setAttribute('aria-expanded', String(!isOpen))
+                chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)'
+            })
             document.addEventListener('click', (e) => {
                 if (!dropdown.contains(e.target) && !avatarBtn.contains(e.target)) {
-                    dropdown.classList.remove('open');
-                    avatarBtn.setAttribute('aria-expanded', 'false');
-                    chevron.style.transform = 'rotate(0deg)';
+                    dropdown.classList.remove('open')
+                    avatarBtn.setAttribute('aria-expanded', 'false')
+                    chevron.style.transform = 'rotate(0deg)'
                 }
-            });
+            })
         }
 
         // ── Logout ──
-        const logoutBtn = document.getElementById('ddLogout');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', async () => {
-                await signOut(auth);
-                window.location.reload();
-            });
-        }
+        const logoutBtn = document.getElementById('ddLogout')
+        if (logoutBtn) { logoutBtn.addEventListener('click', async () => { await signOut(auth); window.location.reload() }) }
 
         // ── Modal ──
-        const loginModal  = document.getElementById('loginModal');
-        const modalCancel = document.getElementById('modalCancel');
-        if (modalCancel) modalCancel.addEventListener('click', () => { loginModal.style.display = 'none'; });
-        if (loginModal)  loginModal.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.style.display = 'none'; });
+        const loginModal  = document.getElementById('loginModal')
+        const modalCancel = document.getElementById('modalCancel')
+        if (modalCancel) modalCancel.addEventListener('click', () => { loginModal.style.display = 'none' })
+        if (loginModal)  loginModal.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.style.display = 'none' })
 
         // ── Comprar Cursos ──
-        document.querySelectorAll('.btn-buy').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                if (!firebaseUser) {
-                    loginModal.style.display = 'flex';
-                    return;
-                }
-
-                if (btn.disabled) { window.location.href = 'mis-cursos.html'; return; }
-
-                const courseId    = btn.getAttribute('data-course-id');
-                const courseTitle = btn.getAttribute('data-course-title');
-                const courseImg   = btn.getAttribute('data-course-img');
-
-                const prevHTML = btn.innerHTML;
-                btn.innerHTML  = '<i class="bx bx-loader-alt bx-spin"></i> Procesando...';
-                btn.disabled   = true;
-
-                try {
-                    await setDoc(
-                        doc(db, 'users', firebaseUser.uid),
-                        { purchasedCourses: arrayUnion({
-                            id: courseId, title: courseTitle, img: courseImg,
-                            date: new Date().toLocaleDateString('es-VE'), progress: 0
-                        })},
-                        { merge: true }
-                    );
-                    btn.innerHTML         = '✓ ¡Adquirido!';
-                    btn.style.background  = 'rgba(34,197,94,0.15)';
-                    btn.style.color       = '#22c55e';
-                    btn.style.border      = '1px solid rgba(34,197,94,0.3)';
-                    setTimeout(() => { window.location.href = 'mis-cursos.html'; }, 900);
-                } catch(err) {
-                    console.error(err);
-                    btn.innerHTML = prevHTML;
-                    btn.disabled  = false;
-                }
-            });
-        });
+        document.addEventListener('click', async (e) => {
+            const btn = e.target.closest('.btn-buy')
+            if (!btn) return
+            if (!firebaseUser) { loginModal.style.display = 'flex'; return }
+            if (btn.disabled) { window.location.href = 'mis-cursos.html'; return }
+            const courseId    = btn.getAttribute('data-course-id')
+            const courseTitle = btn.getAttribute('data-course-title')
+            const courseImg   = btn.getAttribute('data-course-img')
+            const prevHTML    = btn.innerHTML
+            btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Procesando...'
+            btn.disabled  = true
+            try {
+                await setDoc(doc(db, 'users', firebaseUser.uid), { purchasedCourses: arrayUnion({ id: courseId, title: courseTitle, img: courseImg, date: new Date().toLocaleDateString('es-VE'), progress: 0 }) }, { merge: true })
+                btn.innerHTML        = '✓ ¡Adquirido!'
+                btn.style.background = 'rgba(34,197,94,0.15)'
+                btn.style.color      = '#22c55e'
+                btn.style.border     = '1px solid rgba(34,197,94,0.3)'
+                setTimeout(() => { window.location.href = 'mis-cursos.html' }, 900)
+            } catch(err) {
+                console.error(err)
+                btn.innerHTML = prevHTML
+                btn.disabled  = false
+            }
+        })
 
         // ── Filter Buttons ──
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const sections   = document.querySelectorAll('.level-section');
-        const countEl    = document.getElementById('courseCount');
-        const totals = { all: 21, basic: 7, inter: 7, advanced: 7 };
+        const filterBtns = document.querySelectorAll('.filter-btn')
+        const sections   = document.querySelectorAll('.level-section')
+        const countEl    = document.getElementById('courseCount')
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                const filter = btn.getAttribute('data-filter');
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
+                const filter = btn.getAttribute('data-filter')
+                filterBtns.forEach(b => b.classList.remove('active'))
+                btn.classList.add('active')
                 sections.forEach(sec => {
-                    const show = filter === 'all' || sec.getAttribute('data-level') === filter;
-                    sec.classList.toggle('hidden', !show);
-                });
+                    const show = filter === 'all' || sec.getAttribute('data-level') === filter
+                    sec.classList.toggle('hidden', !show)
+                })
+            })
+        })
 
-                const n = totals[filter] || 9;
-                countEl.innerHTML = `Mostrando <strong>${n}</strong> curso${n !== 1 ? 's' : ''}`;
-            });
-        });
-
-        // ══════════════════════════════════════════════════════
-        // ── CARRUSEL ──────────────────────────────────────────
-        // ══════════════════════════════════════════════════════
-        function initCarousel(trackId, wrapperId, dotsId) {
-            const track   = document.getElementById(trackId);
-            const wrapper = document.getElementById(wrapperId);
-            const dotsEl  = document.getElementById(dotsId);
-            if (!track || !wrapper) return;
-
-            const cards     = track.querySelectorAll('.catalog-card');
-            const cardCount = cards.length;
-            const SCROLL_AMT = 330; // px per arrow click
-
-            // Build dots
-            if (dotsEl) {
-                dotsEl.innerHTML = '';
-                cards.forEach((_, i) => {
-                    const dot = document.createElement('button');
-                    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-                    dot.setAttribute('aria-label', `Curso ${i + 1}`);
-                    dot.addEventListener('click', () => {
-                        track.scrollTo({ left: i * SCROLL_AMT, behavior: 'smooth' });
-                    });
-                    dotsEl.appendChild(dot);
-                });
-            }
-
-            function updateState() {
-                const scrollLeft = track.scrollLeft;
-                const maxScroll  = track.scrollWidth - track.clientWidth;
-                const atStart    = scrollLeft <= 4;
-                const atEnd      = scrollLeft >= maxScroll - 4;
-
-                // Fade overlays
-                wrapper.classList.toggle('at-start', atStart);
-                wrapper.classList.toggle('at-end',   atEnd);
-
-                // Arrow disable
-                const prevBtn = wrapper.querySelector('.carousel-arrow.prev');
-                const nextBtn = wrapper.querySelector('.carousel-arrow.next');
-                if (prevBtn) prevBtn.disabled = atStart;
-                if (nextBtn) nextBtn.disabled = atEnd;
-
-                // Active dot
-                if (dotsEl) {
-                    const idx = Math.round(scrollLeft / SCROLL_AMT);
-                    dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) => {
-                        d.classList.toggle('active', i === idx);
-                    });
-                }
-            }
-
-            // Arrow buttons
-            wrapper.querySelectorAll('.carousel-arrow').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const dir = btn.classList.contains('prev') ? -1 : 1;
-                    track.scrollBy({ left: dir * SCROLL_AMT, behavior: 'smooth' });
-                });
-            });
-
-            // Update on scroll
-            track.addEventListener('scroll', updateState, { passive: true });
-
-            // Touch swipe support
-            let touchStartX = 0;
-            track.addEventListener('touchstart', e => {
-                touchStartX = e.touches[0].clientX;
-            }, { passive: true });
-            track.addEventListener('touchend', e => {
-                const diff = touchStartX - e.changedTouches[0].clientX;
-                if (Math.abs(diff) > 50) {
-                    track.scrollBy({ left: diff > 0 ? SCROLL_AMT : -SCROLL_AMT, behavior: 'smooth' });
-                }
-            }, { passive: true });
-
-            updateState(); // initial state
-        }
-
-        // Init each section's carousel
-        initCarousel('trackBasic',    'wrapBasic',    'dotsBasic');
-        initCarousel('trackInter',    'wrapInter',    'dotsInter');
-        initCarousel('trackAdvanced', 'wrapAdvanced', 'dotsAdvanced');
+        // ── Iniciar ──
+        cargarCursosDesdeSanity()
     </script>
 </body>
 </html>
