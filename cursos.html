@@ -315,7 +315,7 @@
         document.querySelectorAll('.btn-buy').forEach(btn => {
             btn.addEventListener('click', async () => {
                 if (!firebaseUser) { loginModal.style.display = 'flex'; return; }
-                if (btn.disabled) { window.location.href = 'mis-cursos.html'; return; }
+                if (btn.disabled) { return; }
                 const courseId = btn.getAttribute('data-course-id');
                 const courseTitle = btn.getAttribute('data-course-title');
                 const courseImg = btn.getAttribute('data-course-img');
