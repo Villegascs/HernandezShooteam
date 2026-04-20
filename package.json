@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@sanity/client": "^7.21.0"
+    "@sanity/client": "^7.21.0",
+    "puppeteer": "^24.41.0"
   }
 }
