@@ -26,7 +26,7 @@
                     <li class="nav-item"><a href="#inicio" class="nav-link active" data-lang="nav_inicio">Inicio</a></li>
                     <li class="nav-item"><a href="#sobre-nosotros" class="nav-link" data-lang="nav_sobre">Sobre Nosotros</a></li>
                     <li class="nav-item"><a href="#logros" class="nav-link" data-lang="nav_logros">Logros</a></li>
-                    <li class="nav-item"><a href="cursos.html" class="nav-link" data-lang="nav_cursos" target="_blank">Cursos</a></li>
+                    <li class="nav-item"><a href="cursos.html" class="nav-link" data-lang="nav_cursos">Cursos</a></li>
                     <li class="nav-item"><a href="#contacto" class="nav-link" data-lang="nav_contacto">Contacto</a></li>
                     <li class="nav-item auth-container" id="auth-nav-container">
                         <!-- Dynamic: Login btn OR Profile Avatar -->
@@ -96,7 +96,7 @@
                 <h1 class="title fade-up delay-1"><span data-lang="hero_title_1">Internacional</span><br><span class="text-gradient" data-lang="hero_title_2">Shooting Team</span></h1>
                 <p class="description fade-up delay-2" data-lang="hero_desc">Formando campeones, perfeccionando la técnica. Entrenamientos personalizados del más alto nivel táctico y competitivo.</p>
                 <div class="hero-brns fade-up delay-3">
-                    <a href="cursos.html" target="_blank" class="btn btn-primary" data-lang="hero_btn1">Ver Cursos</a>
+                    <a href="cursos.html" class="btn btn-primary" data-lang="hero_btn1">Ver Cursos</a>
                     <a href="#contacto" class="btn btn-outline" data-lang="hero_btn2">Reservar Sesión</a>
                 </div>
             </div>
@@ -358,6 +358,7 @@
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
         import { getFirestore, doc, updateDoc, getDoc, setDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { sanityClient } from "./sanity-config.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA2Pu9Wd462rfD_MAsuLBQRDv_FhwADfPE",
@@ -516,70 +517,121 @@
             });
         }
 
-        document.querySelectorAll('.btn-buy').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                e.preventDefault();
+        document.addEventListener('click', async (e) => {
+            const btn = e.target.closest('.btn-buy');
+            if (!btn) return;
+            e.preventDefault();
 
-                // ── Sin sesión: mostrar modal ──
-                if (!firebaseUser) {
-                    loginModal.style.display = 'flex';
-                    return;
-                }
+            // ── Sin sesión: mostrar modal ──
+            if (!firebaseUser) {
+                loginModal.style.display = 'flex';
+                return;
+            }
 
-                const courseId    = btn.getAttribute('data-course-id');
-                const courseTitle = btn.getAttribute('data-course-title');
-                const courseImg   = btn.getAttribute('data-course-img');
+            const courseId    = btn.getAttribute('data-course-id');
+            const courseTitle = btn.getAttribute('data-course-title');
+            const courseImg   = btn.getAttribute('data-course-img');
 
-                // ── Verificar si ya tiene el curso ──
-                try {
-                    const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
-                    if (snap.exists()) {
-                        const courses = snap.data().purchasedCourses || [];
-                        if (courses.find(c => c.id === courseId)) {
-                            // Ya lo tiene → Ir directo a Mis Cursos
-                            btn.innerHTML = '<i class="bx bx-check-circle"></i> Ya lo tienes';
-                            btn.disabled  = true;
-                            setTimeout(() => { window.location.href = 'mis-cursos.html'; }, 800);
-                            return;
-                        }
+            // ── Verificar si ya tiene el curso ──
+            try {
+                const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
+                if (snap.exists()) {
+                    const courses = snap.data().purchasedCourses || [];
+                    if (courses.find(c => c.id === courseId)) {
+                        // Ya lo tiene → Ir directo a Mis Cursos
+                        btn.innerHTML = '<i class="bx bx-check-circle"></i> Ya lo tienes';
+                        btn.disabled  = true;
+                        setTimeout(() => { window.location.href = 'mis-cursos.html'; }, 800);
+                        return;
                     }
-                } catch(err) {
-                    console.warn('No se pudo verificar cursos existentes:', err.message);
                 }
+            } catch(err) {
+                console.warn('No se pudo verificar cursos existentes:', err.message);
+            }
 
-                // ── Procesar compra ──
-                const prevHTML = btn.innerHTML;
-                btn.innerHTML  = '<i class="bx bx-loader-alt bx-spin"></i> Procesando...';
-                btn.disabled   = true;
+            // ── Procesar compra ──
+            const prevHTML = btn.innerHTML;
+            btn.innerHTML  = '<i class="bx bx-loader-alt bx-spin"></i> Procesando...';
+            btn.disabled   = true;
 
-                try {
-                    const newCourse = {
-                        id:       courseId,
-                        title:    courseTitle,
-                        img:      courseImg,
-                        date:     new Date().toLocaleDateString('es-VE'),
-                        progress: 0
-                    };
+            try {
+                const newCourse = {
+                    id:       courseId,
+                    title:    courseTitle,
+                    img:      courseImg,
+                    date:     new Date().toLocaleDateString('es-VE'),
+                    progress: 0
+                };
 
-                    await setDoc(
-                        doc(db, 'users', firebaseUser.uid),
-                        { purchasedCourses: arrayUnion(newCourse) },
-                        { merge: true }
-                    );
+                await setDoc(
+                    doc(db, 'users', firebaseUser.uid),
+                    { purchasedCourses: arrayUnion(newCourse) },
+                    { merge: true }
+                );
 
-                    btn.innerHTML = '<i class="bx bx-check-circle"></i> ¡Adquirido!';
-                    btn.style.background = '#16a34a';
+                btn.innerHTML = '<i class="bx bx-check-circle"></i> ¡Adquirido!';
+                btn.style.background = '#16a34a';
 
-                    setTimeout(() => { window.location.href = 'mis-cursos.html'; }, 900);
+                setTimeout(() => { window.location.href = 'mis-cursos.html'; }, 900);
 
-                } catch(err) {
-                    console.error('Error al procesar compra:', err);
-                    btn.innerHTML = prevHTML;
-                    btn.disabled  = false;
-                    alert('Error al procesar. Inténtalo de nuevo.');
-                }
-            });
+            } catch(err) {
+                console.error('Error al procesar compra:', err);
+                btn.innerHTML = prevHTML;
+                btn.disabled  = false;
+                alert('Error al procesar. Inténtalo de nuevo.');
+            }
         });
+
+        async function loadSanityPreviewCourses() {
+            try {
+                // Consultar 3 cursos ordenados para la previsualización del home
+                const query = '*[_type == "curso"] | order(orden asc)[0...3]';
+                const cursos = await sanityClient.fetch(query);
+
+                const cardsGrid = document.querySelector('.courses .cards-grid');
+                if (!cardsGrid) return;
+
+                cardsGrid.innerHTML = ''; // Limpiar pre-renderizado
+
+                let delay = 1;
+                cursos.forEach(curso => {
+                    let levelLabel = "Básico";
+                    let badgeClass = "";
+                    
+                    if (curso.nivel === "inter") {
+                        levelLabel = "Intermedio";
+                        badgeClass = "accent";
+                    } else if (curso.nivel === "advanced") {
+                        levelLabel = "Avanzado";
+                        badgeClass = "premium";
+                    }
+
+                    const priceText = curso.precio ? `$${curso.precio}` : "Gratis";
+
+                    const cardHTML = `
+                        <div class="course-card fade-up delay-${delay++}">
+                            <div class="course-img placeholder-img" style="background-image: url('${curso.imagenURL || 'https://images.unsplash.com/photo-1595113316349-9fa4eb24f884?auto=format&fit=crop&q=80&w=600'}'); background-size: cover; background-position: center;">
+                                <span class="level-badge ${badgeClass}">${levelLabel}</span>
+                            </div>
+                            <div class="course-content">
+                                <h3>${curso.titulo}</h3>
+                                <p>${curso.descripcion || ''}</p>
+                                <div class="course-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                    <span class="course-price" style="font-weight: 700; font-size: 1.2rem; color: var(--clr-primary);">${priceText}</span>
+                                    <button class="btn btn-primary btn-buy" data-course-id="${curso.courseId}" data-course-title="${curso.titulo}" data-course-img="${curso.imagenURL || ''}">Comprar Curso</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    cardsGrid.innerHTML += cardHTML;
+                });
+            } catch (err) {
+                console.error("Error al cargar cursos de preview:", err);
+            }
+        }
+
+        loadSanityPreviewCourses();
     </script>
 </body>
 </html>

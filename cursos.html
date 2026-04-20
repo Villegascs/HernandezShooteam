@@ -239,11 +239,15 @@
     <script src="lang.js"></script>
     <script src="main.js"></script>
 
+    <script src="https://unpkg.com/@sanity/client@6.21.1/dist/sanityClient.browser.umd.js"></script>
+    <script type="module" src="sanity-config.js"></script>
+
     <script type="module">
         import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+        import { sanityClient } from "./sanity-config.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA2Pu9Wd462rfD_MAsuLBQRDv_FhwADfPE",
@@ -285,10 +289,8 @@
                 try {
                     const snap = await getDoc(doc(db, 'users', user.uid));
                     const purchased = (snap.exists() ? snap.data().purchasedCourses : []) || [];
-                    purchased.forEach(c => {
-                        const btn = document.querySelector(`.btn-buy[data-course-id="${c.id}"]`);
-                        if (btn) { btn.textContent = '✓ Ya adquirido'; btn.disabled = true; btn.style.background = 'rgba(34,197,94,0.15)'; btn.style.color = '#22c55e'; btn.style.border = '1px solid rgba(34,197,94,0.3)'; }
-                    });
+                    window.purchasedCourseIds = purchased.map(c => c.id);
+                    updatePurchasedButtons();
                 } catch(e) {}
             } else {
                 loginBtn.style.display = '';
@@ -312,26 +314,37 @@
         if (modalCancel) modalCancel.addEventListener('click', () => { loginModal.style.display = 'none'; });
         if (loginModal)  loginModal.addEventListener('click', (e) => { if (e.target === loginModal) loginModal.style.display = 'none'; });
 
-        document.querySelectorAll('.btn-buy').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                if (!firebaseUser) { loginModal.style.display = 'flex'; return; }
-                if (btn.disabled) { return; }
-                const courseId = btn.getAttribute('data-course-id');
-                const courseTitle = btn.getAttribute('data-course-title');
-                const courseImg = btn.getAttribute('data-course-img');
-                const prevHTML = btn.innerHTML;
-                btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Procesando...';
-                btn.disabled = true;
-                try {
-                    await setDoc(doc(db, 'users', firebaseUser.uid), { purchasedCourses: arrayUnion({ id: courseId, title: courseTitle, img: courseImg, date: new Date().toLocaleDateString('es-VE'), progress: 0 }) }, { merge: true });
-                    btn.innerHTML = '✓ ¡Adquirido!';
-                    btn.style.background = 'rgba(34,197,94,0.15)';
-                    btn.style.color = '#22c55e';
-                    btn.style.border = '1px solid rgba(34,197,94,0.3)';
-                    setTimeout(() => { window.location.href = 'mis-cursos.html'; }, 900);
-                } catch(err) { console.error(err); btn.innerHTML = prevHTML; btn.disabled = false; }
-            });
+        // Updated via event delegation to support dynamically loaded buttons
+        document.addEventListener('click', async (e) => {
+            const btn = e.target.closest('.btn-buy');
+            if (!btn) return;
+            e.preventDefault();
+
+            if (!firebaseUser) { loginModal.style.display = 'flex'; return; }
+            if (btn.disabled) { return; }
+            const courseId = btn.getAttribute('data-course-id');
+            const courseTitle = btn.getAttribute('data-course-title');
+            const courseImg = btn.getAttribute('data-course-img');
+            const prevHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Procesando...';
+            btn.disabled = true;
+            try {
+                await setDoc(doc(db, 'users', firebaseUser.uid), { purchasedCourses: arrayUnion({ id: courseId, title: courseTitle, img: courseImg, date: new Date().toLocaleDateString('es-VE'), progress: 0 }) }, { merge: true });
+                btn.innerHTML = '✓ ¡Adquirido!';
+                btn.style.background = 'rgba(34,197,94,0.15)';
+                btn.style.color = '#22c55e';
+                btn.style.border = '1px solid rgba(34,197,94,0.3)';
+                setTimeout(() => { window.location.href = 'mis-cursos.html'; }, 900);
+            } catch(err) { console.error(err); btn.innerHTML = prevHTML; btn.disabled = false; }
         });
+
+        window.purchasedCourseIds = [];
+        function updatePurchasedButtons() {
+            window.purchasedCourseIds.forEach(id => {
+                const btn = document.querySelector(`.btn-buy[data-course-id="${id}"]`);
+                if (btn) { btn.innerHTML = '<i class="bx bx-check-circle"></i> Ya lo tienes'; btn.disabled = true; btn.style.background = 'rgba(34,197,94,0.15)'; btn.style.color = '#22c55e'; btn.style.border = '1px solid rgba(34,197,94,0.3)'; }
+            });
+        }
 
         const filterBtns = document.querySelectorAll('.filter-btn');
         const sections   = document.querySelectorAll('.level-section');
@@ -376,7 +389,10 @@
                 if (dotsEl) { const idx = Math.round(sl / SCROLL_AMT); dotsEl.querySelectorAll('.carousel-dot').forEach((d,i) => d.classList.toggle('active', i===idx)); }
             }
             wrapper.querySelectorAll('.carousel-arrow').forEach(btn => {
-                btn.addEventListener('click', () => { track.scrollBy({ left: btn.classList.contains('prev') ? -SCROLL_AMT : SCROLL_AMT, behavior: 'smooth' }); });
+                // Remove existing listeners to avoid duplicates if re-initalized
+                const newBtn = btn.cloneNode(true);
+                btn.replaceWith(newBtn);
+                newBtn.addEventListener('click', () => { track.scrollBy({ left: newBtn.classList.contains('prev') ? -SCROLL_AMT : SCROLL_AMT, behavior: 'smooth' }); });
             });
             track.addEventListener('scroll', updateState, { passive: true });
             let tX = 0;
@@ -385,9 +401,102 @@
             updateState();
         }
 
-        initCarousel('trackBasic', 'wrapBasic', 'dotsBasic');
-        initCarousel('trackInter', 'wrapInter', 'dotsInter');
-        initCarousel('trackAdvanced', 'wrapAdvanced', 'dotsAdvanced');
+        async function loadSanityCourses() {
+            try {
+                // Consultar cursos en orden definido
+                const query = '*[_type == "curso"] | order(orden asc)';
+                const cursos = await sanityClient.fetch(query);
+
+                const trackBasic = document.getElementById('trackBasic');
+                const trackInter = document.getElementById('trackInter');
+                const trackAdvanced = document.getElementById('trackAdvanced');
+
+                // Limpiar contenido estático
+                if (trackBasic) trackBasic.innerHTML = '';
+                if (trackInter) trackInter.innerHTML = '';
+                if (trackAdvanced) trackAdvanced.innerHTML = '';
+
+                let counters = { basic: 0, inter: 0, advanced: 0, all: 0 };
+
+                cursos.forEach(curso => {
+                    counters.all++;
+                    
+                    let levelLabel = "Básico";
+                    let levelClass = "basic";
+                    let track = trackBasic;
+
+                    if (curso.nivel === "inter") {
+                        levelLabel = "Intermedio";
+                        levelClass = "inter";
+                        track = trackInter;
+                        counters.inter++;
+                    } else if (curso.nivel === "advanced") {
+                        levelLabel = "Avanzado";
+                        levelClass = "advanced";
+                        track = trackAdvanced;
+                        counters.advanced++;
+                    } else {
+                        counters.basic++;
+                    }
+
+                    // Determinar si tiene etiquetas como premium o destacado
+                    let extraTags = '';
+                    let buttonStyle = '';
+                    if (curso.etiquetas && curso.etiquetas.includes("premium")) {
+                        extraTags = `<span style="position:absolute;top:1rem;right:1rem;background:linear-gradient(135deg,#FFD700,#FF8C00);color:#000;padding:0.3rem 0.75rem;border-radius:50px;font-size:0.72rem;font-weight:800;z-index:1;text-transform:uppercase;">⭐ Premium</span>`;
+                        buttonStyle = `style="background:linear-gradient(135deg,#FFD700,#FF8C00);color:#000;border:none;"`;
+                    } else if (curso.etiquetas && curso.etiquetas.includes("destacado")) {
+                        extraTags = `<span style="position:absolute;top:1rem;right:1rem;background:var(--clr-primary);color:#fff;padding:0.3rem 0.75rem;border-radius:50px;font-size:0.72rem;font-weight:800;z-index:1;text-transform:uppercase;">🔥 Destacado</span>`;
+                    }
+
+                    const priceText = curso.precio ? `$${curso.precio}` : "Gratis";
+                    const oldPriceHtml = curso.precioAnterior ? `<span class="old-price">$${curso.precioAnterior}</span>` : "";
+
+                    // HTML Tarjeta del curso
+                    const cardHTML = `
+                        <div class="catalog-card">
+                            <div class="catalog-card-img" style="background-image:url('${curso.imagenURL || ''}');">
+                                <span class="level-pill ${levelClass}">${levelLabel}</span>
+                                ${extraTags}
+                            </div>
+                            <div class="catalog-card-body">
+                                <h3>${curso.titulo}</h3>
+                                <p>${curso.descripcion || ''}</p>
+                                <div class="card-footer">
+                                    <div class="card-price">
+                                        ${oldPriceHtml}
+                                        ${priceText}
+                                    </div>
+                                    <button class="btn btn-primary btn-buy" data-course-id="${curso.courseId}" data-course-title="${curso.titulo}" data-course-img="${curso.imagenURL || ''}" ${buttonStyle}>Comprar Curso</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    if (track) track.innerHTML += cardHTML;
+                });
+
+                // Actualizar contadores del DOM
+                document.getElementById('courseCount').innerHTML = `Mostrando <strong>${counters.all}</strong> curso${counters.all !== 1 ? 's' : ''}`;
+                document.querySelector('.level-badge-text.basic').innerText = `${counters.basic} Cursos`;
+                document.querySelector('.level-badge-text.inter').innerText = `${counters.inter} Cursos`;
+                document.querySelector('.level-badge-text.advanced').innerText = `${counters.advanced} Cursos`;
+
+                // Inicializar carruseles de nuevo
+                initCarousel('trackBasic', 'wrapBasic', 'dotsBasic');
+                initCarousel('trackInter', 'wrapInter', 'dotsInter');
+                initCarousel('trackAdvanced', 'wrapAdvanced', 'dotsAdvanced');
+                
+                // Actualizar los botones si el usuario ya está logueado
+                updatePurchasedButtons();
+
+            } catch (err) {
+                console.error("Error al cargar los cursos de Sanity:", err);
+            }
+        }
+
+        // Cargar cursos dinámicamente
+        loadSanityCourses();
     </script>
 </body>
 </html>
