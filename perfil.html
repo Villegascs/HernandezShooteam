@@ -36,19 +36,10 @@
             border: 4px solid var(--clr-bg-card);
             display: flex; align-items: center; justify-content: center;
             font-family: var(--font-heading); font-weight: 700; font-size: 2.2rem; color: #fff;
-            overflow: hidden; cursor: pointer; transition: var(--transition);
+            overflow: hidden;
         }
-        .perfil-avatar-img:hover { opacity: 0.85; }
         .perfil-avatar-img img { width: 100%; height: 100%; object-fit: cover; }
-        .perfil-avatar-edit {
-            position: absolute; bottom: 4px; right: 4px;
-            width: 28px; height: 28px;
-            background: var(--clr-primary); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.85rem; color: #fff; cursor: pointer;
-            border: 2px solid var(--clr-bg-card); transition: var(--transition);
-        }
-        .perfil-avatar-edit:hover { background: var(--clr-primary-hover); }
+
         .perfil-name-header { padding-bottom: 0.75rem; }
         .perfil-name-header h2 { font-size: 1.5rem; }
         .perfil-name-header p { color: var(--clr-text-muted); font-size: 0.9rem; }
@@ -128,11 +119,7 @@
                 <div class="perfil-banner"></div>
                 <div class="perfil-avatar-section">
                     <div class="perfil-avatar-wrap">
-                        <div class="perfil-avatar-img" id="perfilAvatarImg" title="Haz clic para cambiar tu foto"></div>
-                        <div class="perfil-avatar-edit" id="perfilAvatarEdit" title="Cambiar foto">
-                            <i class='bx bx-camera'></i>
-                        </div>
-                        <input type="file" id="photoInput" accept="image/*" style="display:none;">
+                        <div class="perfil-avatar-img" id="perfilAvatarImg"></div>
                     </div>
                     <div class="perfil-name-header">
                         <h2 id="perfilNombreHeader">–</h2>
@@ -305,35 +292,7 @@
             }
         });
 
-        // ── FOTO DE PERFIL ───────────────────────────────────────────────────
-        function triggerFileInput() { document.getElementById('photoInput').click(); }
-        document.getElementById('perfilAvatarImg').addEventListener('click',  triggerFileInput);
-        document.getElementById('perfilAvatarEdit').addEventListener('click', triggerFileInput);
 
-        document.getElementById('photoInput').addEventListener('change', async (e) => {
-            if (!currentUser) return;
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const avatarEl = document.getElementById('perfilAvatarImg');
-            const initials = getInitials(document.getElementById('perfilNombreHeader').textContent || '?');
-            avatarEl.innerHTML = '<i class="bx bx-loader-alt bx-spin" style="font-size:2rem"></i>';
-
-            try {
-                const storageRef = ref(storage, `avatars/${currentUser.uid}`);
-                await uploadBytes(storageRef, file);
-                const url = await getDownloadURL(storageRef);
-                await setDoc(doc(db, 'users', currentUser.uid), { photoURL: url }, { merge: true });
-                setAvatarEl(avatarEl, url, initials);
-                showFeedback('¡Foto actualizada correctamente!', 'success');
-            } catch (err) {
-                console.error('Error subiendo foto:', err);
-                setAvatarEl(avatarEl, null, initials);
-                showFeedback('Error al subir la foto: ' + (err.message || 'inténtalo de nuevo.'), 'error');
-            }
-
-            e.target.value = ''; // reset para permitir re-seleccionar la misma imagen
-        });
 
         // ── AUTENTICACIÓN (carga de datos del perfil) ────────────────────────
         onAuthStateChanged(auth, async (user) => {

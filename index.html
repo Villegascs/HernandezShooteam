@@ -437,59 +437,6 @@
                     });
                 }
 
-                // ── Subida de foto al hacer clic en avatar del dropdown ──
-                dropdownAvatar.style.cursor = 'pointer';
-                dropdownAvatar.title = 'Haz clic para cambiar tu foto';
-                dropdownAvatar.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const input = document.createElement('input');
-                    input.type = 'file';
-                    input.accept = 'image/*';
-                    input.onchange = async () => {
-                        const file = input.files[0];
-                        if (!file) return;
-                        dropdownAvatar.innerHTML = '<i class="bx bx-loader-alt bx-spin" style="font-size:1.4rem"></i>';
-                        try {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
-                                const img = new Image();
-                                img.onload = async () => {
-                                    const canvas = document.createElement('canvas');
-                                    const ctx = canvas.getContext('2d');
-                                    // Comprimir a max 150x150 px para guardar directo sin costo
-                                    const MAX_SIZE = 150;
-                                    let w = img.width, h = img.height;
-                                    if (w > h && w > MAX_SIZE) { h *= MAX_SIZE / w; w = MAX_SIZE; }
-                                    else if (h > MAX_SIZE) { w *= MAX_SIZE / h; h = MAX_SIZE; }
-                                    
-                                    canvas.width = w; canvas.height = h;
-                                    ctx.drawImage(img, 0, 0, w, h);
-                                    
-                                    const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-                                    
-                                    try {
-                                        await updateDoc(doc(db, 'users', user.uid), { photoURL: dataUrl });
-                                        setAvatar(profileAvatar, dataUrl, initials);
-                                        setAvatar(dropdownAvatar, dataUrl, initials);
-                                        dropdownAvatar.style.cursor = 'pointer';
-                                        dropdownAvatar.title = 'Haz clic para cambiar tu foto';
-                                    } catch(err) {
-                                        console.error(err);
-                                        alert("Error al guardar foto en la base de datos.");
-                                        setAvatar(dropdownAvatar, null, initials);
-                                    }
-                                };
-                                img.src = e.target.result;
-                            };
-                            reader.readAsDataURL(file);
-                        } catch(err) {
-                            console.error(err);
-                            setAvatar(dropdownAvatar, null, initials);
-                        }
-                    };
-                    input.click();
-                });
-
             } else {
                 loginBtn.style.display = '';
                 profileWrapper.style.display = 'none';
