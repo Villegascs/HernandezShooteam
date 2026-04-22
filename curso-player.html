@@ -73,7 +73,7 @@
                             <ul class="module-lessons" style="padding: 1rem 0; margin: 0; list-style: none;">
                                 <li class="lesson" style="padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer;">
                                     <i class='bx bx-play-circle' style="color: var(--clr-text-muted);"></i>
-                                    <span class="lesson-title" style="flex: 1; text-decoration: underline; color: #a5b4fc;">Medidas de seguridad</span>
+                                    <span class="lesson-title" style="flex: 1;">Medidas de seguridad</span>
                                     <span class="lesson-time" style="color: var(--clr-text-muted); font-size: 0.85rem;">15:00</span>
                                 </li>
                                 <li class="lesson" style="padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
@@ -132,6 +132,109 @@
         </div>
     </main>
 
+    <!-- Modal de Registro de Compra -->
+    <div class="modal-overlay" id="purchaseModal">
+        <div class="purchase-modal">
+            <i class='bx bx-x modal-close' onclick="closePurchaseModal()"></i>
+            <h2 style="margin-bottom: 0.5rem; font-size: 1.8rem;">Registro de Inscripción</h2>
+            <p style="color: var(--clr-text-muted); margin-bottom: 2rem; font-size: 0.9rem;">Completa tus datos para finalizar la compra vía WhatsApp.</p>
+            
+            <form class="purchase-form" id="purchaseForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="regNombre" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" id="regApellido" placeholder="Tu apellido" required>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Fecha de Nacimiento</label>
+                        <input type="date" id="regFechaNac" required onchange="calculateAge()">
+                    </div>
+                    <div class="form-group">
+                        <label>Edad</label>
+                        <input type="text" id="regEdad" placeholder="--" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Nacionalidad</label>
+                    <input type="text" id="regNacionalidad" placeholder="Ej. Venezolano, Español..." required>
+                </div>
+
+                <div class="form-group">
+                    <label>Curso Seleccionado</label>
+                    <input type="text" id="regCurso" readonly>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-weight: 700; margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.8rem;">
+                    <i class='bx bxl-whatsapp' style="font-size: 1.5rem;"></i> Finalizar en WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script src="main.js"></script>
+    <script>
+        function openPurchaseModal() {
+            const modal = document.getElementById('purchaseModal');
+            const cursoInput = document.getElementById('regCurso');
+            const cursoTitulo = document.querySelector('h1').innerText;
+            
+            cursoInput.value = cursoTitulo;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePurchaseModal() {
+            const modal = document.getElementById('purchaseModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function calculateAge() {
+            const birthDate = new Date(document.getElementById('regFechaNac').value);
+            if (isNaN(birthDate)) return;
+            
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            document.getElementById('regEdad').value = age + " años";
+        }
+
+        document.getElementById('purchaseForm').onsubmit = function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('regNombre').value;
+            const apellido = document.getElementById('regApellido').value;
+            const fecha = document.getElementById('regFechaNac').value;
+            const edad = document.getElementById('regEdad').value;
+            const nacionalidad = document.getElementById('regNacionalidad').value;
+            const curso = document.getElementById('regCurso').value;
+
+            const mensaje = `Hola Hernández Shoteam! 👋%0A%0AMe gustaría inscribirme en un curso. Aquí están mis datos:%0A%0A` +
+                            `*Curso:* ${curso}%0A` +
+                            `*Nombre:* ${nombre} ${apellido}%0A` +
+                            `*Fecha de Nac.:* ${fecha}%0A` +
+                            `*Edad:* ${edad}%0A` +
+                            `*Nacionalidad:* ${nacionalidad}%0A%0A` +
+                            `¿Cuáles son los pasos para el pago?`;
+
+            const whatsappUrl = `https://wa.me/584244745917?text=${mensaje}`;
+            window.open(whatsappUrl, '_blank');
+            closePurchaseModal();
+        };
+
+        // Asignar el evento al botón de comprar original
+        document.querySelector('.btn-buy').onclick = openPurchaseModal;
+    </script>
 </body>
 </html>
