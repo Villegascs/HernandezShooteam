@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Scroll Active State (Intersection Observer) ---
     const sections = document.querySelectorAll('section[id]');
-    
+
     const scrollActive = () => {
         const scrollDown = window.scrollY;
 
@@ -76,13 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Entrance Animations (Intersection Observer) ---
     const faders = document.querySelectorAll('.fade-up, .fade-in');
-    
+
     const appearOptions = {
         threshold: 0.15,
         rootMargin: "0px 0px -50px 0px"
     };
 
-    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+    const appearOnScroll = new IntersectionObserver(function (entries, observer) {
         entries.forEach(entry => {
             if (!entry.isIntersecting) {
                 return;
@@ -97,25 +97,25 @@ document.addEventListener('DOMContentLoaded', () => {
         appearOnScroll.observe(fader);
     });
 
-    
+
     // --- Smooth Scroll for Anchor Links ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
-            
+
             const targetElement = document.querySelector(targetId);
-            
+
             if (targetElement) {
                 const headerOffset = 80;
                 const elementPosition = targetElement.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-  
+
                 window.scrollTo({
-                     top: offsetPosition,
-                     behavior: "smooth"
+                    top: offsetPosition,
+                    behavior: "smooth"
                 });
             }
         });
@@ -128,17 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const btn = contactForm.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
-            
+
             btn.innerText = 'Enviando...';
             btn.style.opacity = '0.7';
-            
+
             // Simulate API call
             setTimeout(() => {
                 btn.innerText = 'Mensaje Enviado';
                 btn.style.backgroundColor = '#4CAF50'; // Green success color
                 btn.style.opacity = '1';
                 contactForm.reset();
-                
+
                 setTimeout(() => {
                     btn.innerText = originalText;
                     btn.style.backgroundColor = '';
@@ -155,14 +155,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Función global para el curso-player.html
-window.loadVideo = function(item, title) {
+window.loadVideo = function (item, title) {
     document.querySelectorAll('.lesson').forEach(el => el.classList.remove('active'));
     item.classList.add('active');
     document.getElementById('videoTitle').innerText = title;
-    
+
     // Simulate loading different video based on selection
     const video = document.getElementById('courseVideoPlayer');
-    if(video) {
+    if (video) {
         video.pause();
         video.currentTime = 0;
         video.play();
@@ -173,31 +173,31 @@ window.loadVideo = function(item, title) {
 // ==========================================
 
 async function cargarContenidoSanity() {
-  try {
-    const projectId = 'wnfb3rqp'
-    const dataset = 'production'
-    const query = encodeURIComponent(`*[_type == "inicio"][0]`)
-    const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`
+    try {
+        const projectId = 'wnfb3rqp'
+        const dataset = 'production'
+        const query = encodeURIComponent(`*[_type == "inicio"][0]`)
+        const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`
 
-    const response = await fetch(url)
-    const data = await response.json()
-    const inicio = data.result
+        const response = await fetch(url)
+        const data = await response.json()
+        const inicio = data.result
 
-    if (inicio) {
-      const titulo = document.querySelector('.title')
-      const subtitulo = document.querySelector('.subtitle')
-      const descripcion = document.querySelector('.description')
-      const boton = document.querySelector('.btn.btn-primary')
+        if (inicio) {
+            const titulo = document.querySelector('.title')
+            const subtitulo = document.querySelector('.subtitle')
+            const descripcion = document.querySelector('.description')
+            const boton = document.querySelector('.btn.btn-primary')
 
-      if (titulo && inicio.titulo) titulo.childNodes[0].textContent = inicio.titulo
-      if (subtitulo && inicio.subtitulo) subtitulo.textContent = inicio.subtitulo
-      if (descripcion && inicio.descripcion) descripcion.textContent = inicio.descripcion
-      if (boton && inicio.botonTexto) boton.textContent = inicio.botonTexto
+            // if (titulo && inicio.titulo) titulo.childNodes[0].textContent = inicio.titulo
+            if (subtitulo && inicio.subtitulo) subtitulo.textContent = inicio.subtitulo
+            if (descripcion && inicio.descripcion) descripcion.textContent = inicio.descripcion
+            if (boton && inicio.botonTexto) boton.textContent = inicio.botonTexto
+        }
+
+    } catch (error) {
+        console.log('Sanity error:', error)
     }
-
-  } catch (error) {
-    console.log('Sanity error:', error)
-  }
 }
 
 cargarContenidoSanity()

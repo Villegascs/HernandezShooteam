@@ -332,6 +332,8 @@ img {
 
 .hero-content {
     max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .subtitle {
@@ -352,13 +354,14 @@ img {
 .description {
     font-size: 1.2rem;
     color: var(--clr-text-muted);
-    margin-bottom: 2.5rem;
+    margin: 0 auto 2.5rem;
     max-width: 600px;
 }
 
 .hero-brns {
     display: flex;
     gap: 1rem;
+    justify-content: center;
 }
 
 .scroll-indicator {
@@ -875,8 +878,8 @@ img {
    ================================== */
 .player-body {
     background-color: var(--clr-bg-main);
-    overflow-y: hidden;
-    height: 100vh;
+    /* overflow-y: hidden; Removed to allow scrolling */
+    /* height: 100vh; Removed to allow scrolling */
 }
 .player-header {
     background-color: var(--clr-bg-alt);

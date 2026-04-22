@@ -20,7 +20,7 @@ const translations = {
         dd_salir: "Cerrar Sesión",
         // Hero
         hero_subtitle: "Precisión y Excelencia",
-        hero_title_1: "Internacional",
+        hero_title_1: "Welcome to Hernández",
         hero_title_2: "Shooting Team",
         hero_desc: "Formando campeones, perfeccionando la técnica. Entrenamientos personalizados del más alto nivel táctico y competitivo.",
         hero_btn1: "Ver Cursos",
@@ -90,7 +90,7 @@ const translations = {
         dd_salir: "Sign Out",
         // Hero
         hero_subtitle: "Precision and Excellence",
-        hero_title_1: "International",
+        hero_title_1: "Welcome to Hernández",
         hero_title_2: "Shooting Team",
         hero_desc: "Building champions, perfecting technique. Personalized training of the highest tactical and competitive level.",
         hero_btn1: "View Courses",

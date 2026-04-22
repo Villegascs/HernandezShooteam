@@ -13,73 +13,120 @@
     <!-- Header Lite -->
     <header class="header scrolled player-header">
         <div class="player-nav-container">
-            <a href="mis-cursos.html" class="back-link">
-                <i class='bx bx-chevron-left'></i> Volver a Mis Cursos
+            <a href="cursos.html" class="back-link" style="display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(255,255,255,0.08); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 500; transition: all 0.3s; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.1);" onmouseover="this.style.background='rgba(255,255,255,0.15)'; this.style.borderColor='rgba(255,255,255,0.3)';" onmouseout="this.style.background='rgba(255,255,255,0.08)'; this.style.borderColor='rgba(255,255,255,0.1)';">
+                <i class='bx bx-chevron-left' style="font-size: 1.2rem;"></i> Volver a Cursos
             </a>
             <div class="course-title-header" id="headerCourseTitle">Course Title Placeholder</div>
             <div class="user-menu">
-                <button class="btn btn-primary" onclick="window.location.href='mis-cursos.html'" style="padding: 0.4rem 1rem; font-size: 0.9rem;">Mi Panel</button>
+                <!-- Botón Mi Panel removido -->
             </div>
         </div>
     </header>
 
-    <main class="player-main">
-        <div class="player-content">
-            <div class="video-container">
-                <!-- Using a high-quality placeholder video -->
-                <video id="courseVideoPlayer" controls poster="https://images.unsplash.com/photo-1595113316349-9fa4eb24f884?auto=format&fit=crop&q=80&w=1200">
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                    Tu navegador no soporta el formato de video.
-                </video>
-            </div>
-            <div class="video-info">
-                <h2 id="videoTitle">1. Medidas de seguridad</h2>
-                <div class="video-meta">
-                    <span class="badge"><i class='bx bx-time'></i> 15 Minutos</span>
-                    <span>HD 1080p</span>
+    <main class="course-landing" style="margin-top: 60px;">
+        <!-- Banner oscuro superior -->
+        <div style="background: #0d1117; padding: 4rem 2rem; border-bottom: 1px solid var(--glass-border);">
+            <div style="max-width: 1100px; margin: 0 auto; color: #fff;">
+                <h1 style="font-size: clamp(2rem, 4vw, 2.5rem); margin-bottom: 1rem;">Entrenamiento Especializado para 10m Pistola de aire</h1>
+                <p style="font-size: 1.1rem; margin-bottom: 1.5rem; max-width: 700px; line-height: 1.6; color: #cbd5e1;">Descubre los fundamentos, perfecciona tu técnica y domina la mentalidad competitiva con este programa integral diseñado por instructores internacionales.</p>
+                <div style="display: flex; gap: 1.2rem; align-items: center; font-size: 0.9rem; flex-wrap: wrap;">
+                    <span style="background: #f59e0b; color: #000; padding: 0.3rem 0.6rem; font-weight: 700; border-radius: 4px;">Lo más vendido</span>
+                    <span><i class='bx bxs-star' style="color: #f59e0b;"></i> 4.8 (1,234 valoraciones)</span>
+                    <span>5,678 estudiantes</span>
                 </div>
-                <p class="video-desc">Aprende las 4 reglas básicas de seguridad en el manejo de armas, cómo inspeccionar el arma y mantener un entorno seguro en el campo de tiro.</p>
             </div>
         </div>
-        
-        <div class="player-sidebar">
-            <div class="sidebar-header">
-                <h3>Contenido del Curso</h3>
-            </div>
-            <div class="course-modules" id="courseModulesContainer">
-                
-                <!-- Module 1 -->
-                <div class="module expanded">
-                    <div class="module-header" onclick="this.parentElement.classList.toggle('expanded')">
-                        <h4>Fundamentos Básicos</h4>
-                        <i class='bx bx-chevron-down'></i>
+
+        <!-- Contenedor principal de 2 columnas -->
+        <div style="max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: 4rem; align-items: start;">
+            
+            <!-- Columna Izquierda -->
+            <div class="left-col">
+                <!-- Lo que incluye -->
+                <div style="margin-bottom: 3rem; background: var(--clr-bg-card); border: 1px solid var(--glass-border); padding: 2rem; border-radius: var(--border-radius-md);">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Este curso incluye:</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.2rem; color: var(--clr-text-muted);">
+                        <div style="display: flex; align-items: center; gap: 0.8rem;"><i class='bx bx-video' style="font-size: 1.2rem;"></i> 12 horas de vídeo bajo demanda</div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem;"><i class='bx bx-mobile-alt' style="font-size: 1.2rem;"></i> Acceso en móviles y TV</div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem;"><i class='bx bx-file-blank' style="font-size: 1.2rem;"></i> 5 recursos descargables</div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem;"><i class='bx bx-captions' style="font-size: 1.2rem;"></i> Subtítulos</div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem;"><i class='bx bx-trophy' style="font-size: 1.2rem;"></i> Certificado de finalización</div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem;"><i class='bx bx-infinite' style="font-size: 1.2rem;"></i> Acceso de por vida</div>
                     </div>
-                    <ul class="module-lessons">
-                        <li class="lesson active" onclick="loadVideo(this, 'Medidas de seguridad')">
-                            <i class='bx bx-play-circle'></i>
-                            <span class="lesson-title">Medidas de seguridad</span>
-                            <span class="lesson-time">15:00</span>
-                        </li>
-                        <li class="lesson" onclick="loadVideo(this, 'Reglamento respecto a la ISSF')">
-                            <i class='bx bx-lock-alt'></i>
-                            <span class="lesson-title">Reglamento respecto a la ISSF</span>
-                            <span class="lesson-time">22:30</span>
-                        </li>
-                    </ul>
                 </div>
 
-                <!-- Module 2 -->
-                <div class="module">
-                    <div class="module-header" onclick="this.parentElement.classList.toggle('expanded')">
-                        <h4>Técnica Práctica</h4>
-                        <i class='bx bx-chevron-down'></i>
+                <!-- Contenido del curso -->
+                <div>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Contenido del curso</h2>
+                    <p style="color: var(--clr-text-muted); margin-bottom: 1rem; font-size: 0.9rem;">2 secciones • 3 clases • 1h 15m de duración total</p>
+                    
+                    <div class="course-modules" id="courseModulesContainer" style="border: 1px solid var(--glass-border); border-radius: var(--border-radius-md); overflow: hidden;">
+                        <!-- Module 1 -->
+                        <div class="module expanded" style="border-bottom: 1px solid var(--glass-border);">
+                            <div class="module-header" onclick="this.parentElement.classList.toggle('expanded')" style="background: rgba(255,255,255,0.02); padding: 1rem 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                                <h4 style="margin: 0; font-size: 1.1rem;">Fundamentos Básicos</h4>
+                                <div style="display: flex; align-items: center; gap: 1rem; color: var(--clr-text-muted); font-size: 0.9rem;">
+                                    <span>2 clases • 37 min</span>
+                                    <i class='bx bx-chevron-down'></i>
+                                </div>
+                            </div>
+                            <ul class="module-lessons" style="padding: 1rem 0; margin: 0; list-style: none;">
+                                <li class="lesson" style="padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer;">
+                                    <i class='bx bx-play-circle' style="color: var(--clr-text-muted);"></i>
+                                    <span class="lesson-title" style="flex: 1; text-decoration: underline; color: #a5b4fc;">Medidas de seguridad</span>
+                                    <span class="lesson-time" style="color: var(--clr-text-muted); font-size: 0.85rem;">15:00</span>
+                                </li>
+                                <li class="lesson" style="padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                                    <i class='bx bx-lock-alt' style="color: var(--clr-text-muted);"></i>
+                                    <span class="lesson-title" style="flex: 1;">Reglamento respecto a la ISSF</span>
+                                    <span class="lesson-time" style="color: var(--clr-text-muted); font-size: 0.85rem;">22:30</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Module 2 -->
+                        <div class="module">
+                            <div class="module-header" onclick="this.parentElement.classList.toggle('expanded')" style="background: rgba(255,255,255,0.02); padding: 1rem 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                                <h4 style="margin: 0; font-size: 1.1rem;">Técnica Práctica</h4>
+                                <div style="display: flex; align-items: center; gap: 1rem; color: var(--clr-text-muted); font-size: 0.9rem;">
+                                    <span>1 clase • 38 min</span>
+                                    <i class='bx bx-chevron-down'></i>
+                                </div>
+                            </div>
+                            <ul class="module-lessons" style="padding: 1rem 0; margin: 0; list-style: none;">
+                                <li class="lesson" style="padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                                    <i class='bx bx-lock-alt' style="color: var(--clr-text-muted);"></i>
+                                    <span class="lesson-title" style="flex: 1;">Postura y Agarre</span>
+                                    <span class="lesson-time" style="color: var(--clr-text-muted); font-size: 0.85rem;">38:00</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <ul class="module-lessons">
-                        <li class="lesson" onclick="loadVideo(this, 'Postura y Agarre')">
-                            <i class='bx bx-lock-alt'></i>
-                            <span class="lesson-title">Postura y Agarre (Pronto)</span>
-                        </li>
-                    </ul>
+                </div>
+            </div>
+
+            <!-- Columna Derecha (Sticky Card) -->
+            <div class="right-col" style="position: sticky; top: 100px;">
+                <div style="background: var(--clr-bg-card); border: 1px solid var(--glass-border); border-radius: var(--border-radius-lg); overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+                    <div style="position: relative;">
+                        <img src="https://images.unsplash.com/photo-1595113316349-9fa4eb24f884?auto=format&fit=crop&q=80&w=600" alt="Portada del curso" style="width: 100%; height: 200px; object-fit: cover; display: block;">
+                        <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+                            <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                <i class='bx bx-play' style="font-size: 2.5rem; color: #000; margin-left: 4px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 2rem;">
+                        <div style="display: flex; align-items: flex-end; gap: 0.8rem; margin-bottom: 0.5rem;">
+                            <span style="font-size: 2.2rem; font-weight: 800; line-height: 1; color: var(--clr-primary);">$49.99</span>
+                            <span style="color: var(--clr-text-muted); text-decoration: line-through; font-size: 1.1rem; padding-bottom: 0.2rem;">$99.99</span>
+                        </div>
+                        <p style="color: #ef4444; font-size: 0.9rem; margin-bottom: 1.5rem; font-weight: 600;"><i class='bx bx-alarm'></i> 50% de descuento. ¡Quedan 2 días!</p>
+                        <button class="btn btn-primary btn-buy" style="width: 100%; padding: 1.2rem; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 10px 20px rgba(255,92,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">Comprar curso</button>
+
+                        <p style="text-align: center; font-size: 0.8rem; color: var(--clr-text-muted); margin-bottom: 0.5rem;">Garantía de reembolso de 30 días</p>
+                    </div>
                 </div>
             </div>
         </div>
