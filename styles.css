@@ -1518,3 +1518,45 @@ img {
     color: var(--clr-text-muted);
     cursor: not-allowed;
 }
+
+/* ==================================
+   Responsive Course Player Grid
+   ================================== */
+.course-details-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    display: flex;
+    gap: 4rem;
+    align-items: flex-start;
+}
+
+.course-details-grid .left-col {
+    flex: 2;
+    min-width: 0;
+}
+
+.course-details-grid .right-col {
+    flex: 1;
+    min-width: 300px;
+    position: sticky;
+    top: 100px;
+}
+
+@media (max-width: 992px) {
+    .course-details-grid {
+        flex-direction: column-reverse;
+        gap: 2rem;
+        padding: 2rem 1.5rem;
+    }
+    
+    .course-details-grid .right-col {
+        position: static;
+        width: 100%;
+        min-width: 0;
+    }
+    
+    .course-details-grid .left-col {
+        width: 100%;
+    }
+}
