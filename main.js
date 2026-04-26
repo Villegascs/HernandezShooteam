@@ -121,36 +121,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Form Submission (Prevent Default for now) ---
+
+
+    // ==========================================
+    // --- Lógica del Formulario de Contacto ---
+    // ==========================================
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async function(e) {
+            // Si la acción es la de ejemplo de Formspree, prevenimos el envío real
+            // para que el usuario pueda ver el feedback visual en el código.
+            if (this.action.includes('XXXXXX')) {
+                e.preventDefault();
+                alert("¡Configuración necesaria! Por favor, crea una cuenta en Formspree.io y reemplaza 'XXXXXX' en el archivo index.html con tu ID de formulario.");
+                return;
+            }
+
             e.preventDefault();
-            const btn = contactForm.querySelector('button[type="submit"]');
-            const originalText = btn.innerText;
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerText;
+            
+            submitBtn.innerText = "Enviando...";
+            submitBtn.disabled = true;
 
-            btn.innerText = 'Enviando...';
-            btn.style.opacity = '0.7';
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
 
-            // Simulate API call
-            setTimeout(() => {
-                btn.innerText = 'Mensaje Enviado';
-                btn.style.backgroundColor = '#4CAF50'; // Green success color
-                btn.style.opacity = '1';
-                contactForm.reset();
-
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.backgroundColor = '';
-                }, 3000);
-            }, 1500);
+                if (response.ok) {
+                    document.getElementById('contactForm').style.display = 'none';
+                    document.getElementById('formSuccessMessage').style.display = 'block';
+                    this.reset();
+                } else {
+                    const data = await response.json();
+                    if (data.errors) {
+                        alert(data.errors.map(error => error.message).join(", "));
+                    } else {
+                        alert("Hubo un error al enviar la solicitud. Por favor, intenta de nuevo.");
+                    }
+                }
+            } catch (error) {
+                alert("Error de conexión. Por favor, verifica tu internet e intenta de nuevo.");
+            } finally {
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            }
         });
     }
-
-    // ==========================================
-    // --- Lógica de Cursos ---
-    // Manejado por el módulo Firebase en index.html
-    // ==========================================
 
 });
 
