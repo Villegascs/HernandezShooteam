@@ -39,9 +39,10 @@ export default {
     },
     {
       name: 'imagen',
-      title: 'URL de Imagen',
-      type: 'url',
-      description: 'URL directa de la imagen de portada del curso (Unsplash, etc.)',
+      title: 'Imagen del Curso',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Sube la imagen de portada del curso',
     },
     {
       name: 'horas',
@@ -89,6 +90,40 @@ export default {
       type: 'number',
       description: 'Número para ordenar los cursos dentro del catálogo (1 = primero)',
     },
+    {
+      name: 'beneficios',
+      title: 'Este curso incluye (Beneficios)',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Ej: "12 horas de vídeo bajo demanda", "Acceso de por vida"'
+    },
+    {
+      name: 'modulos',
+      title: 'Módulos del Curso',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'titulo', title: 'Título del Módulo', type: 'string' },
+            {
+              name: 'clases',
+              title: 'Clases',
+              type: 'array',
+              of: [
+                {
+                  type: 'object',
+                  fields: [
+                    { name: 'titulo', title: 'Título de la clase', type: 'string' },
+                    { name: 'duracion', title: 'Duración (ej. 15:00)', type: 'string' }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ],
   preview: {
     select: {

@@ -223,4 +223,212 @@ async function cargarContenidoSanity() {
     }
 }
 
+async function cargarCursosSanity() {
+    const cursosGrid = document.getElementById('cursosGrid')
+    if (!cursosGrid) return // Solo ejecutar en la página de cursos
+
+    try {
+        const projectId = 'wnfb3rqp'
+        const dataset = 'production'
+        // Traemos todos los cursos ordenados por "orden" ascendente
+        const query = encodeURIComponent(`*[_type == "curso"] | order(orden asc) {
+            _id,
+            titulo,
+            descripcion,
+            nivel,
+            "imagenURL": imagen.asset->url,
+            premium
+        }`)
+        const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`
+
+        const response = await fetch(url)
+        const data = await response.json()
+        const cursos = data.result
+
+        if (cursos && cursos.length > 0) {
+            // Limpiar contenedor (por si acaso)
+            cursosGrid.innerHTML = ''
+            
+            let delay = 1;
+            cursos.forEach(curso => {
+                // Determinar el texto del nivel
+                let nivelTexto = 'Básico';
+                let nivelClase = '';
+                if (curso.nivel === 'inter') {
+                    nivelTexto = 'Intermedio';
+                    nivelClase = 'accent';
+                } else if (curso.nivel === 'advanced') {
+                    nivelTexto = 'Avanzado';
+                    nivelClase = 'premium';
+                }
+
+                // Si es premium, podemos forzar el badge premium si es necesario,
+                // aunque el esquema tiene "nivel" y "premium" por separado.
+                if (curso.premium) {
+                    nivelTexto = 'Premium';
+                    nivelClase = 'premium';
+                }
+
+                // Si no hay imagen, usar una por defecto
+                const imageUrl = curso.imagenURL ? curso.imagenURL : 'https://images.unsplash.com/photo-1595113316349-9fa4eb24f884?auto=format&fit=crop&q=80&w=600';
+
+                // Crear HTML de la tarjeta
+                const cardHTML = `
+                    <div class="course-card fade-up delay-${delay > 3 ? 3 : delay} visible">
+                        <div class="course-img placeholder-img" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;">
+                            <span class="level-badge ${nivelClase}">${nivelTexto}</span>
+                        </div>
+                        <div class="course-content">
+                            <h3>${curso.titulo || 'Sin Título'}</h3>
+                            <p>${curso.descripcion || 'Sin descripción'}</p>
+                            <div class="course-actions" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 1rem;">
+                                <a href="curso-player.html?id=${curso._id}" class="btn btn-primary btn-buy">Ver curso</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                cursosGrid.insertAdjacentHTML('beforeend', cardHTML);
+                delay++;
+            });
+        } else {
+            cursosGrid.innerHTML = '<p style="text-align:center; width:100%; color:var(--clr-text-muted);">No hay cursos disponibles por el momento.</p>'
+        }
+    } catch (error) {
+        console.log('Sanity error al cargar cursos:', error)
+        cursosGrid.innerHTML = '<p style="text-align:center; width:100%; color:var(--clr-text-muted);">Error al cargar los cursos. Por favor intenta de nuevo más tarde.</p>'
+    }
+}
+
+async function cargarCursoPlayerSanity() {
+    const isPlayerPage = document.getElementById('headerCourseTitle');
+    if (!isPlayerPage) return; // Solo ejecutar en curso-player.html
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseId = urlParams.get('id');
+
+    if (!courseId) {
+        document.getElementById('courseHeroTitle').textContent = 'Curso no encontrado';
+        document.getElementById('courseHeroDesc').textContent = 'No se ha especificado un curso válido.';
+        return;
+    }
+
+    try {
+        const projectId = 'wnfb3rqp';
+        const dataset = 'production';
+        const query = encodeURIComponent(`*[_type == "curso" && _id == "${courseId}"][0]{..., "imagenURL": imagen.asset->url}`);
+        const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+        const curso = data.result;
+
+        if (!curso) {
+            document.getElementById('courseHeroTitle').textContent = 'Curso no encontrado';
+            return;
+        }
+
+        // 1. Textos Generales
+        document.getElementById('headerCourseTitle').textContent = curso.titulo || 'Curso';
+        document.getElementById('courseHeroTitle').textContent = curso.titulo || 'Sin título';
+        document.getElementById('courseHeroDesc').textContent = curso.descripcion || 'Sin descripción';
+        
+        // 2. Badge de Nivel
+        const badge = document.getElementById('courseHeroBadge');
+        if (curso.premium) {
+            badge.textContent = 'Premium';
+            badge.style.background = 'var(--clr-primary)';
+            badge.style.display = 'inline-block';
+        } else if (curso.nivel === 'advanced') {
+            badge.textContent = 'Avanzado';
+            badge.style.background = 'var(--clr-primary)';
+            badge.style.display = 'inline-block';
+        } else if (curso.nivel === 'inter') {
+            badge.textContent = 'Intermedio';
+            badge.style.background = '#f59e0b';
+            badge.style.color = '#000';
+            badge.style.display = 'inline-block';
+        } else if (curso.nivel === 'basic') {
+            badge.textContent = 'Básico';
+            badge.style.background = '#22c55e';
+            badge.style.display = 'inline-block';
+        }
+
+        // 3. Sidebar (Imagen, Precios)
+        if (curso.imagenURL) document.getElementById('courseSidebarImg').src = curso.imagenURL;
+        if (curso.precio) document.getElementById('courseSidebarPrice').textContent = `$${curso.precio.toFixed(2)}`;
+        if (curso.precioAnterior) document.getElementById('courseSidebarOldPrice').textContent = `$${curso.precioAnterior.toFixed(2)}`;
+
+        // 4. Beneficios
+        const benefitsContainer = document.getElementById('courseBenefitsContainer');
+        benefitsContainer.innerHTML = '';
+        if (curso.beneficios && curso.beneficios.length > 0) {
+            curso.beneficios.forEach(beneficio => {
+                benefitsContainer.innerHTML += `<div style="display: flex; align-items: center; gap: 0.8rem;"><i class='bx bx-check-circle' style="font-size: 1.2rem; color: var(--clr-primary);"></i> ${beneficio}</div>`;
+            });
+        } else {
+            benefitsContainer.innerHTML = '<p style="color:var(--clr-text-muted);">Información no disponible.</p>';
+        }
+
+        // 5. Módulos y Clases
+        const modulesContainer = document.getElementById('courseModulesContainer');
+        const summary = document.getElementById('courseModulesSummary');
+        modulesContainer.innerHTML = '';
+        
+        if (curso.modulos && curso.modulos.length > 0) {
+            let totalClases = 0;
+            let sectionCount = curso.modulos.length;
+            
+            curso.modulos.forEach((modulo, index) => {
+                const numClases = modulo.clases ? modulo.clases.length : 0;
+                totalClases += numClases;
+                
+                let clasesHTML = '';
+                if (modulo.clases) {
+                    modulo.clases.forEach(clase => {
+                        clasesHTML += `
+                            <li class="lesson" style="padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                                <i class='bx bx-play-circle' style="color: var(--clr-text-muted);"></i>
+                                <span class="lesson-title" style="flex: 1;">${clase.titulo || 'Clase'}</span>
+                                <span class="lesson-time" style="color: var(--clr-text-muted); font-size: 0.85rem;">${clase.duracion || '--:--'}</span>
+                            </li>
+                        `;
+                    });
+                }
+
+                // El primer módulo se muestra expandido
+                const isExpanded = index === 0 ? 'expanded' : '';
+                
+                const moduleHTML = `
+                    <div class="module ${isExpanded}" style="border-bottom: 1px solid var(--glass-border);">
+                        <div class="module-header" onclick="this.parentElement.classList.toggle('expanded')" style="background: rgba(255,255,255,0.02); padding: 1rem 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                            <h4 style="margin: 0; font-size: 1.1rem;">${modulo.titulo || 'Módulo'}</h4>
+                            <div style="display: flex; align-items: center; gap: 1rem; color: var(--clr-text-muted); font-size: 0.9rem;">
+                                <span>${numClases} clases</span>
+                                <i class='bx bx-chevron-down'></i>
+                            </div>
+                        </div>
+                        <ul class="module-lessons" style="padding: 1rem 0; margin: 0; list-style: none;">
+                            ${clasesHTML}
+                        </ul>
+                    </div>
+                `;
+                modulesContainer.innerHTML += moduleHTML;
+            });
+            
+            summary.textContent = `${sectionCount} secciones • ${totalClases} clases`;
+        } else {
+            summary.textContent = 'El temario no está disponible aún.';
+            modulesContainer.style.display = 'none';
+        }
+
+    } catch (error) {
+        console.error('Error cargando los detalles del curso:', error);
+        document.getElementById('courseHeroTitle').textContent = 'Error';
+        document.getElementById('courseHeroDesc').textContent = 'No pudimos cargar la información del curso.';
+    }
+}
+
 cargarContenidoSanity()
+cargarCursosSanity()
+cargarCursoPlayerSanity()

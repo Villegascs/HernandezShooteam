@@ -1549,13 +1549,13 @@ img {
         gap: 2rem;
         padding: 2rem 1.5rem;
     }
-    
+
     .course-details-grid .right-col {
         position: static;
         width: 100%;
         min-width: 0;
     }
-    
+
     .course-details-grid .left-col {
         width: 100%;
     }
