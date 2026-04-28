@@ -236,7 +236,7 @@ async function cargarCursosSanity() {
             titulo,
             descripcion,
             nivel,
-            "imagenURL": imagen.asset->url,
+            "imagenURL": coalesce(imagen.asset->url, imagen),
             premium
         }`)
         const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`
@@ -316,7 +316,7 @@ async function cargarCursoPlayerSanity() {
     try {
         const projectId = 'wnfb3rqp';
         const dataset = 'production';
-        const query = encodeURIComponent(`*[_type == "curso" && _id == "${courseId}"][0]{..., "imagenURL": imagen.asset->url}`);
+        const query = encodeURIComponent(`*[_type == "curso" && _id == "${courseId}"][0]{..., "imagenURL": coalesce(imagen.asset->url, imagen)}`);
         const url = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`;
 
         const response = await fetch(url);

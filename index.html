@@ -322,8 +322,7 @@
 
         async function loadSanityPreviewCourses() {
             try {
-                // Consultar 3 cursos ordenados para la previsualización del home
-                const query = '*[_type == "curso"] | order(orden asc)[0...3]{..., "imagenURL": imagen.asset->url}';
+                const query = '*[_type == "curso"] | order(orden asc)[0...3]{..., "imagenURL": coalesce(imagen.asset->url, imagen)}';
                 const cursos = await sanityClient.fetch(query);
 
                 const cardsGrid = document.querySelector('.courses .cards-grid');
