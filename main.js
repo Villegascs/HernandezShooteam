@@ -159,15 +159,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('formSuccessMessage').style.display = 'block';
                     this.reset();
                 } else {
-                    const data = await response.json();
-                    if (data.errors) {
-                        alert(data.errors.map(error => error.message).join(", "));
-                    } else {
-                        alert("Hubo un error al enviar la solicitud. Por favor, intenta de nuevo.");
+                    let errorMessage = "Hubo un error al enviar la solicitud. Por favor, intenta de nuevo.";
+                    try {
+                        const text = await response.text();
+                        const data = JSON.parse(text);
+                        if (data.errors) {
+                            errorMessage = data.errors.map(error => error.message).join(", ");
+                        } else if (data.error) {
+                            errorMessage = data.error;
+                        }
+                    } catch (parseError) {
+                        console.error("Error al parsear la respuesta del servidor:", parseError);
                     }
+                    alert(errorMessage);
                 }
             } catch (error) {
-                alert("Error de conexión. Por favor, verifica tu internet e intenta de nuevo.");
+                console.error("Error de red o conexión:", error);
+                alert("Error al enviar. Verifica tu conexión o intenta más tarde. Detalles en consola.");
             } finally {
                 submitBtn.innerText = originalBtnText;
                 submitBtn.disabled = false;
