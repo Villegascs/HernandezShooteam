@@ -129,29 +129,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', async function(e) {
-            // Si la acción es la de ejemplo de Formspree, prevenimos el envío real
-            // para que el usuario pueda ver el feedback visual en el código.
-            if (this.action.includes('XXXXXX')) {
-                e.preventDefault();
-                alert("¡Configuración necesaria! Por favor, crea una cuenta en Formspree.io y reemplaza 'XXXXXX' en el archivo index.html con tu ID de formulario.");
-                return;
-            }
-
             e.preventDefault();
-            const formData = new FormData(this);
+
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalBtnText = submitBtn.innerText;
             
             submitBtn.innerText = "Enviando...";
             submitBtn.disabled = true;
 
+            const payload = {
+                nombre: document.getElementById('name').value,
+                correo: document.getElementById('email').value,
+                asunto: document.getElementById('subject').value,
+                mensaje: document.getElementById('message').value
+            };
+
             try {
-                const response = await fetch(this.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
+                // Usamos Formsubmit.co que es mucho más amigable con los AdBlockers
+                const response = await fetch("https://formsubmit.co/ajax/hernandezshoteam@gmail.com", {
+                    method: "POST",
+                    headers: { 
+                        'Content-Type': 'application/json',
                         'Accept': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify(payload)
                 });
 
                 if (response.ok) {
@@ -159,23 +160,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('formSuccessMessage').style.display = 'block';
                     this.reset();
                 } else {
-                    let errorMessage = "Hubo un error al enviar la solicitud. Por favor, intenta de nuevo.";
-                    try {
-                        const text = await response.text();
-                        const data = JSON.parse(text);
-                        if (data.errors) {
-                            errorMessage = data.errors.map(error => error.message).join(", ");
-                        } else if (data.error) {
-                            errorMessage = data.error;
-                        }
-                    } catch (parseError) {
-                        console.error("Error al parsear la respuesta del servidor:", parseError);
-                    }
-                    alert(errorMessage);
+                    const errorData = await response.json();
+                    console.error("Error Formsubmit:", errorData);
+                    alert("Error al enviar el formulario por correo.");
                 }
             } catch (error) {
-                console.error("Error de red o conexión:", error);
-                alert("Error al enviar. Verifica tu conexión o intenta más tarde. Detalles en consola.");
+                console.error("Error de conexión:", error);
+                alert("Error de red. Asegúrate de tener buena conexión.");
             } finally {
                 submitBtn.innerText = originalBtnText;
                 submitBtn.disabled = false;
