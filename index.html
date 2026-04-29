@@ -256,7 +256,11 @@
                     </div>
 
                     <div class="contact-form-wrapper glass-panel fade-in delay-2">
-                        <form id="contactForm" class="contact-form" action="https://formspree.io/f/xyklakyb" method="POST">
+                        <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+                        <form id="contactForm" class="contact-form" action="https://formsubmit.co/hernandezshoteam@gmail.com" method="POST" target="hidden_iframe">
+                            <!-- Configuración Formsubmit sin JavaScript -->
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_template" value="table">
                             <div class="form-group">
                                 <label for="name">Nombre Completo</label>
                                 <input type="text" id="name" name="name" placeholder="Ej. Juan Pérez" required>
@@ -322,7 +326,8 @@
 
         async function loadSanityPreviewCourses() {
             try {
-                const query = '*[_type == "curso"] | order(orden asc)[0...3]{..., "imagenURL": coalesce(imagen.asset->url, imagen)}';
+                // Filtramos específicamente por destacado == true y limitamos a 3
+                const query = '*[_type == "curso" && destacado == true] | order(orden asc)[0...3]{_id, titulo, descripcion, nivel, precio, "imagenURL": coalesce(imagen.asset->url, imagen)}';
                 const cursos = await sanityClient.fetch(query);
 
                 const cardsGrid = document.querySelector('.courses .cards-grid');
@@ -343,19 +348,16 @@
                         badgeClass = "premium";
                     }
 
-                    const priceText = curso.precio ? `$${curso.precio}` : "Gratis";
-
                     const cardHTML = `
-                        <div class="course-card fade-up delay-${delay++}">
+                        <div class="course-card fade-up delay-${delay++} visible">
                             <div class="course-img placeholder-img" style="background-image: url('${curso.imagenURL || 'https://images.unsplash.com/photo-1595113316349-9fa4eb24f884?auto=format&fit=crop&q=80&w=600'}'); background-size: cover; background-position: center;">
                                 <span class="level-badge ${badgeClass}">${levelLabel}</span>
                             </div>
                             <div class="course-content">
-                                <h3>${curso.titulo}</h3>
+                                <h3>${curso.titulo || 'Sin título'}</h3>
                                 <p>${curso.descripcion || ''}</p>
-                                <div class="course-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
-                                    <span class="course-price" style="font-weight: 700; font-size: 1.2rem; color: var(--clr-primary);">${priceText}</span>
-                                    <button class="btn btn-primary btn-buy" data-course-id="${curso.courseId}" data-course-title="${curso.titulo}" data-course-img="${curso.imagenURL || ''}">Comprar Curso</button>
+                                <div class="course-actions" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 1rem;">
+                                    <a href="curso-player.html?id=${curso._id}" class="btn btn-primary btn-buy">Ver curso</a>
                                 </div>
                             </div>
                         </div>

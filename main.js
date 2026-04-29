@@ -125,51 +125,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ==========================================
     // --- Lógica del Formulario de Contacto ---
+    // Usamos el truco del iframe oculto para evitar la recarga de la página
+    // y mantener 100% la inmunidad contra AdBlockers.
     // ==========================================
     const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
+    const hiddenIframe = document.getElementById('hidden_iframe');
+    let formSubmitted = false;
 
+    if (contactForm && hiddenIframe) {
+        contactForm.addEventListener('submit', function() {
+            formSubmitted = true;
             const submitBtn = this.querySelector('button[type="submit"]');
-            const originalBtnText = submitBtn.innerText;
-            
             submitBtn.innerText = "Enviando...";
-            submitBtn.disabled = true;
+        });
 
-            const payload = {
-                nombre: document.getElementById('name').value,
-                correo: document.getElementById('email').value,
-                asunto: document.getElementById('subject').value,
-                mensaje: document.getElementById('message').value
-            };
-
-            try {
-                // Usamos Formsubmit.co que es mucho más amigable con los AdBlockers
-                const response = await fetch("https://formsubmit.co/ajax/hernandezshoteam@gmail.com", {
-                    method: "POST",
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (response.ok) {
-                    document.getElementById('contactForm').style.display = 'none';
-                    document.getElementById('formSuccessMessage').style.display = 'block';
-                    this.reset();
-                } else {
-                    const errorData = await response.json();
-                    console.error("Error Formsubmit:", errorData);
-                    alert("Error al enviar el formulario por correo.");
-                }
-            } catch (error) {
-                console.error("Error de conexión:", error);
-                alert("Error de red. Asegúrate de tener buena conexión.");
-            } finally {
-                submitBtn.innerText = originalBtnText;
-                submitBtn.disabled = false;
+        hiddenIframe.addEventListener('load', function() {
+            if (formSubmitted) {
+                document.getElementById('contactForm').style.display = 'none';
+                document.getElementById('formSuccessMessage').style.display = 'block';
+                contactForm.reset();
+                formSubmitted = false;
             }
         });
     }
